@@ -38,8 +38,8 @@ const db = (source, allowedKeys) => {
       return setTimeout(() => callback(null, found), 1000);
     },
 
-    update(id, object, callback) {
-      const index = data.findIndex(item => (String(item.id) === id));
+    update(object, callback) {
+      const index = data.findIndex(item => (String(item.id) === String(object.id)));
       if (index == null) {
         return setTimeout(() => callback('Item not found', null), 1000);
       }
@@ -53,8 +53,8 @@ const db = (source, allowedKeys) => {
       return setTimeout(() => callback(null, object1), 1000);
     },
 
-    delete(id, callback) {
-      const index = data.findIndex(item => (String(item.id) === id));
+    delete(object, callback) {
+      const index = data.findIndex(item => (String(item.id) === String(object.id)));
       if (index == null) {
         return setTimeout(() => callback('Item not found', null), 1000);
       }

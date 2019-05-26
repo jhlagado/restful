@@ -37,21 +37,32 @@ const getRouter = (Customer) => {
 
     .put((req, res) => {
       const { customerId } = req.params;
-      Customer.update(customerId, req.body, (err, customer) => {
+      Customer.findById(customerId, (err, customer) => {
         if (err) {
           return res.send(err);
         }
-        return res.json(customer);
+        const { id, ...body } = req.body;
+        const object = {
+          ...customer,
+          ...body,
+        };
+        Customer.update(object, (err, customer) => {
+          if (err) {
+            return res.send(err);
+          }
+          return res.json(customer);
+        });
       });
     })
-
     .delete((req, res) => {
       const { customerId } = req.params;
-      Customer.delete(customerId, (err) => {
-        if (err) {
-          return res.send(err);
-        }
-        return res.send('Item deleted');
+      Customer.findById(customerId, (err, customer) => {
+        Customer.delete(customer, (err) => {
+          if (err) {
+            return res.send(err);
+          }
+          return res.send('Item deleted');
+        });
       });
     });
 

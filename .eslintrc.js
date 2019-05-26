@@ -14,6 +14,8 @@ module.exports = {
   },
   rules: {
     "no-confusing-arrow": 0,
-    "implicit-arrow-linebreak": 0
+    "implicit-arrow-linebreak": 0,
+    "no-shadow": 0,
+    "consistent-return": 0,
   },
 };

@@ -1,5 +1,8 @@
 // @ts-nocheck
 const express = require('express');
+const chalk = require('chalk');
+const debug = require('debug')('app');
+
 const bodyParser = require('body-parser');
 
 const app = express();
@@ -21,6 +24,8 @@ const router = require('./router')(Customer);
 
 app.use('/api', router);
 
-app.listen(port, () => {
-  console.log(`Running ${nodeEnv} server on port ${port}`);
+app.server = app.listen(port, () => {
+  debug(`Running ${nodeEnv} server on port ${chalk.yellow(port)}`);
 });
+
+module.exports = app;
