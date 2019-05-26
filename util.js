@@ -1,3 +1,4 @@
+
 const containsText = (value1, value2) =>
   value1 == null ? false : value1.includes(value2);
 
@@ -10,7 +11,6 @@ const pickProps = (keys, object) => keys.reduce(
   },
   {},
 );
-
 
 module.exports = {
   containsText,
