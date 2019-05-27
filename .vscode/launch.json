@@ -8,7 +8,12 @@
             "type": "node",
             "request": "launch",
             "name": "Launch Program",
-            "program": "${workspaceFolder}/app.js"
+            "program": "${workspaceFolder}/app.js",
+            "env": {
+                "NODE_ENV": "development",
+                "PORT": "4000",
+                "DEBUG": "app,app*"
+            }
         }
     ]
 }
