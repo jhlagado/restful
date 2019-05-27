@@ -1,7 +1,9 @@
 const fs = require('fs');
 const debug = require('debug')('app-db');
 
-const { pickProps, omitProps, debounce, containsText } = require('./util');
+const {
+  pickProps, omitProps, debounce, containsText
+} = require('./util');
 
 const db = (filename, allowedKeys, delay = 1000) => {
   const now0 = Date.now();
@@ -15,10 +17,10 @@ const db = (filename, allowedKeys, delay = 1000) => {
 
   const persist = debounce(() => {
     fs.writeFile(filename, JSON.stringify(data), (err) => {
-      if (err){
+      if (err) {
         return debug(`Could not persist data to file: ${filename}`);
       }
-    })
+    });
   }, delay);
 
   return {
@@ -64,7 +66,6 @@ const db = (filename, allowedKeys, delay = 1000) => {
         ...object1,
         _modified: now,
       };
-      debug(object1)
       data[index] = object2;
       persist();
       return setTimeout(() => callback(null, object2), 1000);
