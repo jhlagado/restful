@@ -28,7 +28,7 @@ const router = require('./router')(Customer);
 
 app.use('/api', router);
 
-app.get('/', (req, res) => {
+app.get('/', (_req, res) => {
   res.redirect('/api/customers');
 });
 
@@ -36,4 +36,4 @@ app.server = app.listen(port, () => {
   debug(`Running ${nodeEnv} server at port ${chalk.yellow(port)}`);
 });
 
-module.exports = app; 
+module.exports = app;
