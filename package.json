@@ -4,17 +4,18 @@
   "description": "backend restful service",
   "main": "app.js",
   "scripts": {
-    "start": "DEBUG=app nodemon app.js",
+    "start": "nodemon app.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint ."
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "body-parser": "^1.19.0", 
+    "body-parser": "^1.19.0",
     "chalk": "^2.4.2",
     "debug": "^4.1.1",
     "express": "^4.17.0",
+    "morgan": "^1.9.1",
     "nodemon": "^1.19.1"
   },
   "devDependencies": {
@@ -28,7 +29,8 @@
     "delay": 2500,
     "env": {
       "NODE_ENV": "development",
-      "PORT": 4000
+      "PORT": 4000,
+      "DEBUG": "app,app*"
     }
   }
 }

@@ -3,6 +3,7 @@ const express = require('express');
 const chalk = require('chalk');
 const debug = require('debug')('app');
 const morgan = require('morgan');
+const path = require('path');
 
 const bodyParser = require('body-parser');
 
@@ -20,14 +21,19 @@ const customerKeys = [
   'id', '_created', '_modified', 'first_name', 'last_name',
   'email', 'gender', 'ip_address',
 ];
-const Customer = db(require('./customer-data'), customerKeys);
+const filename = path.join(__dirname, 'customer-data.json');
+const Customer = db(filename, customerKeys, 2500);
 
 const router = require('./router')(Customer);
 
 app.use('/api', router);
 
-app.server = app.listen(port, () => {
-  debug(`Running ${nodeEnv} server on port ${chalk.yellow(port)}`);
+app.get('/', (req, res) => {
+  res.redirect('/api/customers');
 });
 
-module.exports = app;
+app.server = app.listen(port, () => {
+  debug(`Running ${nodeEnv} server at port ${chalk.yellow(port)}`);
+});
+
+module.exports = app; 
