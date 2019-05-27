@@ -13,14 +13,14 @@ const db = (filename, allowedKeys, delay = 1000) => {
   const now0 = Date.now();
 
   const source = JSON.parse(fs.readFileSync(filename, 'utf8'));
-  const /**
-     * @param {any} item
-     */
-    data = source.map(item => ({
-      ...item,
-      _created: now0,
-      _modified: now0,
-    }));
+  /**
+    * @param {any} item
+    */
+  const data = source.map(item => ({
+    ...item,
+    _created: now0,
+    _modified: now0,
+  }));
 
   const persist = debounce(() => {
     fs.writeFile(filename, JSON.stringify(data), (err) => {
