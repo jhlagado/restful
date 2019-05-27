@@ -58,7 +58,7 @@ const getRouter = (Customer) => {
       const { customerId } = req.params;
       Customer.findById(customerId, (err, customer) => {
         if (err) {
-            return res.send(err);
+          return res.send(err);
         }
         Customer.delete(customer, (err) => {
           if (err) {

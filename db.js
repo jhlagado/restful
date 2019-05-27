@@ -5,15 +5,22 @@ const {
   pickProps, omitProps, debounce, containsText
 } = require('./util');
 
+/**
+ * @param {String} filename
+ * @param {any} allowedKeys
+ */
 const db = (filename, allowedKeys, delay = 1000) => {
   const now0 = Date.now();
 
   const source = JSON.parse(fs.readFileSync(filename, 'utf8'));
-  const data = source.map(item => ({
-    ...item,
-    _created: now0,
-    _modified: now0,
-  }));
+  const /**
+     * @param {any} item
+     */
+    data = source.map(item => ({
+      ...item,
+      _created: now0,
+      _modified: now0,
+    }));
 
   const persist = debounce(() => {
     fs.writeFile(filename, JSON.stringify(data), (err) => {
@@ -25,6 +32,10 @@ const db = (filename, allowedKeys, delay = 1000) => {
 
   return {
 
+    /**
+     * @param {any} object
+     * @param {(err: any, value: any) => void} callback
+     */
     create(object, callback) {
       const now = Date.now();
       const object1 = {
@@ -38,6 +49,10 @@ const db = (filename, allowedKeys, delay = 1000) => {
       return setTimeout(() => callback(null, object1), 1000);
     },
 
+    /**
+     * @param {{}} query
+     * @param {(err: any, value: any) => void} callback
+     */
     find(query, callback) {
       const query1 = pickProps(allowedKeys, query);
       const filtered = data.filter(
@@ -46,6 +61,10 @@ const db = (filename, allowedKeys, delay = 1000) => {
       return setTimeout(() => callback(null, filtered), 1000);
     },
 
+    /**
+     * @param {string} id
+     * @param {{ (err: any, value: any): void; }} callback
+     */
     findById(id, callback) {
       const found = data.find(item => (String(item.id) === id));
       if (found == null) {
@@ -54,6 +73,10 @@ const db = (filename, allowedKeys, delay = 1000) => {
       return setTimeout(() => callback(null, found), 1000);
     },
 
+    /**
+     * @param {{ id: any; }} object
+     * @param {{ (err: any, value: any): void; }} callback
+     */
     update(object, callback) {
       const object1 = omitProps(['id', '_created', '_modified'], object);
       const index = data.findIndex(item => (String(item.id) === String(object.id)));
@@ -71,6 +94,10 @@ const db = (filename, allowedKeys, delay = 1000) => {
       return setTimeout(() => callback(null, object2), 1000);
     },
 
+    /**
+     * @param {{ id: any; }} object
+     * @param {{ (err: any, value: any): void; }} callback
+     */
     delete(object, callback) {
       const index = data.findIndex(item => (String(item.id) === String(object.id)));
       if (index == null) {
