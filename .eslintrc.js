@@ -18,5 +18,9 @@ module.exports = {
     "no-shadow": 0,
     "consistent-return": 0,
     "comma-dangle": 0,
+    "padded-blocks": 0,
+    "object-curly-newline": 0,
+    "no-param-reassign": 0,
+    "no-return-assign": 0,
   }
 };

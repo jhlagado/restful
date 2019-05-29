@@ -37,24 +37,8 @@ const pickProps = (keys, object) => keys.reduce(
   {},
 );
 
-/**
- * @param { string[] } keys
- * @param {{}} object
- * @return {{}}
- */
-const omitProps = (keys, object) => Object.keys(object).reduce(
-  (acc, key) => {
-    if (!(keys.includes(key))) {
-      acc[key] = object[key];
-    }
-    return acc;
-  },
-  {},
-);
-
 module.exports = {
   containsText,
   debounce,
-  omitProps,
   pickProps,
 };
