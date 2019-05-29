@@ -23,14 +23,11 @@ const debounce = (callback, wait) => {
 };
 
 /**
- * @param {{ reduce: (arg0: (acc: any, key: any) => any, arg1: {}) => void; }} keys
+ * @param { string[] } keys
  * @param {{}} object
+ * @return {{}}
  */
 const pickProps = (keys, object) => keys.reduce(
-  /**
-   * @param {{ [x: string]: any; }} acc
-   * @param {string} key
-   */
   (acc, key) => {
     if (key in object) {
       acc[key] = object[key];
@@ -42,7 +39,8 @@ const pickProps = (keys, object) => keys.reduce(
 
 /**
  * @param { string[] } keys
- * @param {{ [x: string]: any; }} object
+ * @param {{}} object
+ * @return {{}}
  */
 const omitProps = (keys, object) => Object.keys(object).reduce(
   (acc, key) => {

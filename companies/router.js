@@ -1,66 +1,66 @@
 const express = require('express');
 
-const getRouter = (Customer) => {
+const getRouter = (database) => {
   const router = express.Router();
-  router.route('/customers')
+  router.route('/companies')
 
     .post((req, res) => {
-      Customer.create(req.body, (err, customer) => {
+      database.create(req.body, (err, company) => {
         if (err) {
           return res.send(err);
         }
-        return res.status(201).json(customer);
+        return res.status(201).json(company);
       });
       return null;
     })
 
     .get((req, res) => {
-      Customer.find(req.query, (err, customers) => {
+      database.find(req.query, (err, companies) => {
         if (err) {
           return res.send(err);
         }
-        return res.json(customers);
+        return res.json(companies);
       });
     });
 
-  router.route('/customers/:customerId')
+  router.route('/companies/:id')
 
     .get((req, res) => {
-      const { customerId } = req.params;
-      Customer.findById(customerId, (err, customer) => {
+      const { id } = req.params;
+      database.findById(id, (err, company) => {
         if (err) {
           return res.send(err);
         }
-        return res.json(customer);
+        return res.json(company);
       });
     })
 
     .put((req, res) => {
-      const { customerId } = req.params;
-      Customer.findById(customerId, (err, customer) => {
+      const { id } = req.params;
+      database.findById(id, (err, company) => {
         if (err) {
           return res.send(err);
         }
         const { id, ...body } = req.body;
         const object = {
-          ...customer,
+          ...company,
           ...body,
         };
-        Customer.update(object, (err, customer) => {
+        database.update(object, (err, company) => {
           if (err) {
             return res.send(err);
           }
-          return res.json(customer);
+          return res.json(company);
         });
       });
     })
     .delete((req, res) => {
-      const { customerId } = req.params;
-      Customer.findById(customerId, (err, customer) => {
+      const { id } = req.params;
+      database.findById(id, (err, company) => {
         if (err) {
           return res.send(err);
         }
-        Customer.delete(customer, (err) => {
+        database.delete(company, (err) => {
           if (err) {
             return res.send(err);
           }
