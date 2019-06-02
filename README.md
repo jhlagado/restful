@@ -157,7 +157,7 @@ explicitly exported the other file.
 The way scope is contained is that the content of a node
 file is automatically wrapped inside a function
 of the form:
-```
+```js
 function (exports, require, module, __filename, __dirname) {
   // ...your code here
 }
@@ -205,7 +205,7 @@ os
 Buffer
 ```
 The console object
-```
+```js
 console.log()
 console.info()
 console.warn()
@@ -213,14 +213,14 @@ console.error()
 console.assert(cond, msg)
 ```
 The process object
-```
+```js
 process.env
 process.argv
 process.exit()
 process.nextTick(cb)
 ```
 The os object
-```
+```js
 os.tmpdir()
 os.endianness()
 os.hostname()
@@ -363,7 +363,7 @@ readFilePromise('file.txt')
 ```
 ## How promisify works
 the way `util.promisify` is implemented can be seen here:
-```
+```js
 const promisify = (func) =>
   (...args) =>
     new Promise((resolve, reject) =>
@@ -425,7 +425,7 @@ const createUser = async (username, password, picture) => {
 }
 ```
 ## Promise API
-```
+```js
 Promise.resolve(value)   returns a promise that resolves to value
 Promise.reject(err)      returns a promise that rejects with err
 Promise.all([p1,p1...])  returns when EVERY promise resolves
@@ -445,7 +445,7 @@ Promise.resolve('Hello')
   .then(value => console.log(value));
 ```
 ## Promise API
-```
+```js
 const getRandomNumber = () => new Promise((resolve) => {
   setTimeout(
     () => resolve(Math.random() * 10),
