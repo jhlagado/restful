@@ -407,7 +407,7 @@ This example shows one of the downsides to promise syntax:
 it's complex to pass around intermediate results such as `userID`. Can you understand what's going on here?
 
 In those cases it may still be simpler to nest one `then()` handler inside another `then()` handler.
-```
+```js
 const createUser = (username, password, picture) =>
   dbCreateUser(username, password)
   .then(userID =>
