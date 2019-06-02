@@ -4,7 +4,7 @@
 Promise.resolve('Hello')
   .then((value) => {
     console.log(value);
-    throw('Hello error');
+    throw ('Hello error');
   })
   .catch(() => Promise.resolve('Hello recovery!'))
   .then(value => console.log(value));
