@@ -180,6 +180,52 @@ exports       an object to be exported by module
 filename      a full path to the file
 paths         an array of paths to search when importing a module
 ```
+### Imports
+Files have scopes which are isolated from one other. Apart from attaching variables to the global scope (not recommended) the way to import values into a file is with the CommonJS `require()` function. This function is injected as an argument by the function wrapper mentioned earlier.
+
+`require()` takes a file path which is either relative or absolute.
+
+#### Relative
+const app = require('./app');
+
+#### Absolute
+const lodah = require('lodash');
+
+Note that the extension is not needed. Relative paths are relative to the current file which absolute paths search for
+a module by name in `node_modules` directory if present and searches each parent directory if it has a `node_modules` directory until it reaches the user's home directory.
+
+You can see the paths it searches by looking at the `module.paths` object. Here is a example on my Macbook.
+```
+'/Users/jhardy/projects/node/restful/node_modules',
+'/Users/jhardy/projects/node/node_modules',
+'/Users/jhardy/projects/node_modules',
+'/Users/jhardy/node_modules',
+'/Users/node_modules',
+'/node_modules',
+'/Users/jhardy/.node_modules',
+'/Users/jhardy/.node_libraries',
+'/usr/local/lib/node'
+```
+An import can be anything exported from another file. It could be a value such as a number, string, array or a function. Quite often though it is an object that contains a collection of values.
+### Exports
+Just as imports use an injected function `require()`, exporting is done with the injected `module.exports` and `exports` objects. The `exports` object is really just a shortcut ot alias to `module.exports` so either can be used.
+
+`exports` is good for exporting individual values. eg.
+```js
+exports.x = 1;
+exports.y = 2;
+exports.z = 3;
+```
+while `module.exports` enables you to replace the entire exports object. While it's a little bit wordier, I find `module.exports` to be more flexible in most cases.
+```js
+module.exports = {
+  x: 1,
+  y: 2,
+  z: 3,
+};
+```
+When you `require()` a module for the first time the top level code in that file runs once and assignment are made to the `module.exports` object which is passed back. This result is cached by the system so that when `require()` is called again on the same module it will return the cached version.
+
 ## Global Scope
 Global scope is available
 everywhere in your programs through a single varibale called `global`.
