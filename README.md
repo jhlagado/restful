@@ -187,11 +187,13 @@ Files have scopes which are isolated from one other. Apart from attaching variab
 `require()` takes a file path which is either relative or absolute.
 
 #### Relative
+```js
 const app = require('./app');
-
+```
 #### Absolute
+```js
 const lodash = require('lodash');
-
+```
 Note that the extension is not needed. Relative paths are relative to the current file which absolute paths search for
 a module by name in `node_modules` directory if present and searches each parent directory if it has a `node_modules` directory until it reaches the user's home directory.
 
