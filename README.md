@@ -358,10 +358,18 @@ In node there is a convention where the first argument of the callback function 
 The second argument is the result of the asynchronous operation.
 
 ## fs
+
+***** give examples using fs
+
 readFileSync
 readFile
 writeFileSync
 writeFile
+
+***** timers
+setTimeout
+setImmediate
+nextTick
 
 # buffers
 # streams
@@ -415,6 +423,9 @@ new Promise((resolve, reject) => {
   reject(err);
 });
 ```
+***** give examples of promises
+
+
 ## promisify
 `promisify` is a utility function that comes standard with node. It is a `high order function`
 ```
