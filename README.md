@@ -119,7 +119,7 @@ When you clone a project's repository, you can restore its
 `node_modules` directory by simply running `npm install`
 or `npm i`
 
-## node command
+# The node command
 To execute a file containing JavaScript we simply type:
 ```
 node <filepath>
@@ -129,7 +129,8 @@ Note:
 * if filepath is a directory then it will load index.js (if present).
 * if filepath is a directory AND it has a package.json then it will
 load the file "main" entry (if present).
-
+# Modules
+Node files are referred to as modules.
 ## CommonJS
 Node has been around now for over a decade and uses the CommonJS
 module format. This is an older module format which predates
@@ -144,7 +145,7 @@ to the newer ES2016 module format but in
 the meantime, we recommend continuing to work with
 the CommonJS format for node projects.
 
-## Modules
+## Module variables
 Script files in node are encapsulated as CommonJS
 modules. This means that variables that are declared
 in a file are scoped to that file and won't leak into the
@@ -189,7 +190,7 @@ Files have scopes which are isolated from one other. Apart from attaching variab
 const app = require('./app');
 
 #### Absolute
-const lodah = require('lodash');
+const lodash = require('lodash');
 
 Note that the extension is not needed. Relative paths are relative to the current file which absolute paths search for
 a module by name in `node_modules` directory if present and searches each parent directory if it has a `node_modules` directory until it reaches the user's home directory.
@@ -224,11 +225,44 @@ module.exports = {
   z: 3,
 };
 ```
+### Destructuring imports
+We can importing the previous example as a single object and then use the properties on the object. eg.
+```js
+const object = require('./module');
+console.log(object.x + object.y);
+```
+but it's usually better to destructure the parts of the object that we are interested in
+```js
+const { x, y } = require('./module');
+console.log(x + y);
+```
+This leads to cleaner code.
+### Import Cache
 When you `require()` a module for the first time the top level code in that file runs once and assignment are made to the `module.exports` object which is passed back. This result is cached by the system so that when `require()` is called again on the same module it will return the cached version.
 
+These cached objects are mutable so use with care. It is possible to modify the imported objects and this can affect later uses of the cached import.
+
+Consider this example where a file `module.js` contains:
+```js
+module.exports = {
+  x: 123,
+};
+```
+We can import the exported object, assign it to a variable and modify it. Then when we import it again we get the modified version.
+
+This is a way to comunicate state between modules but as with global state, this is not recommended.
+```js
+const value1 = require('./module');
+
+value1.y = 456;
+
+const value2 = require('./module');
+
+console.log({ value2 });
+```
 ## Global Scope
-Global scope is available
-everywhere in your programs through a single varibale called `global`.
+Global scope is available everywhere in your programs through a single varibale called `global`.
+
 You can see `global` by
 ```
 console.log(global);
@@ -282,19 +316,10 @@ os.cpus()
 os.networkInterfaces()
 ```
 ## running JavaScript from the command line
-node can parse and run JavaScript code from the command line with
+node can parse and run JavaScript code directly from the command line with
 ```
 node -p "console.log(1 + 2)"
 ```
-## nodemon
-### configuration
-### environment
-
-## require
-debug
-logging
-env DEBUG
-
 # tools
 ## eslint
 ## debugging with vscode
@@ -309,10 +334,17 @@ program:   location of file to run
 env:       object with vars to add to debug environment
 ```
 # async operations
+Asynchronous operations are actions that happen at some time in the future. Because node is a single-threaded architecture in which everything that happens on the main thread is synchrononous, node must relinquish control of the main thread regularly in order for asynchronous operations to get a chance of happening.
+
+Relinquishing control means letting code finish and complete tasks but being "called-back" by the system when the asynchronous results of some earlier operation have a result.
+
+The most common patterns for asynchronous operations in JavaScript are
 * callbacks
 * promises
 * async/await
+A callback is a common pattern for event-driven software in the browser such as event listeners.
 
+Node uses the same event-driven architecture on the server to handle asynchronous operations such as file, network, database access so it's worth getting to know this pattern well.
 ## callback
 A node callback is a function with the signature
 ```
@@ -320,7 +352,7 @@ function (err, result) {
 
 }
 ```
-The first argument is always the error condition which is either null or an Error object.
+In node there is a convention where the first argument of the callback function is ALWAYS the error condition which is either null or an Error object.
 The second argument is the result of the asynchronous operation.
 
 ## fs
@@ -508,10 +540,16 @@ const coinToss = new Promise((resolve, reject) =>
 
 # ----
 
-answer basic questions
-main: app.js
-
 ## express
+
+## nodemon
+### configuration
+### environment
+# debug
+# logging
+# env DEBUG
+
+
 npm install express
 
 check package.json dependencies

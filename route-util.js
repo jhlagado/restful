@@ -1,8 +1,6 @@
-const express = require('express');
+const getListRoutes = (route, database) => {
 
-const getRoutes = (database, listUrl, itemUrl) => {
-  const router = express.Router();
-  router.route(listUrl)
+  route
 
     .post((req, res) => {
       database.create(req.body)
@@ -15,8 +13,11 @@ const getRoutes = (database, listUrl, itemUrl) => {
         .catch(err => res.send(err))
         .then(list => res.json(list));
     });
+};
 
-  router.route(itemUrl)
+const getItemRoutes = (route, database) => {
+
+  route
 
     .all((req, res, next) => {
       const { id } = req.params;
@@ -42,8 +43,9 @@ const getRoutes = (database, listUrl, itemUrl) => {
       database.delete(req.item)
         .catch(err => res.send(err))
         .then(() => res.send('Item deleted')));
-
-  return router;
 };
 
-module.exports = { getRoutes };
+module.exports = {
+  getListRoutes,
+  getItemRoutes,
+};

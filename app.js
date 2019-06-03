@@ -5,9 +5,6 @@ const debug = require('debug')('app');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 
-const customers = require('./customers');
-const companies = require('./companies');
-
 const nodeEnv = process.env.NODE_ENV;
 const port = process.env.PORT || 3000;
 
@@ -17,8 +14,10 @@ app.use(morgan('tiny'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.use('/api', customers);
-app.use('/api', companies);
+require('./customers')
+  .then(customers => app.use('/api', customers));
+require('./companies')
+  .then(companies => app.use('/api', companies));
 
 app.get('/', (_req, res) => {
   res.redirect('/api/customers');
