@@ -127,14 +127,11 @@ node <filepath>
 Note:
 * the .js extension is optional
 * if filepath is a directory then it will load index.js (if present).
-* if filepath is a directory AND it has a package.json then it will
-load the file "main" entry (if present).
+* if filepath is a directory AND it has a package.json then it will load the file "main" entry (if present).
 # Modules
 Node files are referred to as modules.
 ## CommonJS
-Node has been around now for over a decade and uses the CommonJS
-module format. This is an older module format which predates
-the module format standardised in JavaScript in 2016.
+Node has been around now for over a decade and uses the CommonJS module format. This is an older module format which predates the module format standardised in JavaScript in 2016.
 
 CommonJS does not use the import and export keywords but
 take a slightly different approach to importing and exporting
@@ -322,8 +319,6 @@ node can parse and run JavaScript code directly from the command line with
 ```
 node -p "console.log(1 + 2)"
 ```
-# tools
-## eslint
 ## debugging with vscode
 vscode debugger `launch.json`
 
@@ -334,6 +329,123 @@ request    "launch" | "attach"
 name       title of config
 program:   location of file to run
 env:       object with vars to add to debug environment
+```
+## dev dependencies
+You can install tools to facilitate development but don't need to be deployed with your completed code as "dev dependency".
+
+Just like normal dependencies you install them with npm but you at the `-D` command line switch.
+```
+npm install eslint -D
+```
+This updates the `devDependencies` section in your `package.json`. eg.
+```
+"devDependencies": {
+  "eslint": "^5.16.0",
+}
+```
+## scripts
+Unless you add something to your path, tools that have been installed in your node_modules are a little inconvenient to run.
+
+For example to run eslint on the files in the root directory of your project you might type
+```
+./node_modules/.bin/eslint .
+```
+You will usually find a shortcut to your tool in the `.bin` directory but this is still too wordy for most uses.
+
+Far better is to add a script entry to your `package.json` to make it available from npm. Any entry you place in the `scripts` section of `package.json` can be executed by npm run. For example if we add an entry called `lint`
+```
+"scripts": {
+  "lint": "eslint ."
+}
+```
+we could run it as:
+```
+npm run lint
+```
+npm is able to find eslint by searching `node_modules` and you can save some typing.
+
+Each entry in `package.json` is a command in the shell of the operating system you are running on. This can lead to some platform incompatibilities particularly for Windows users. It is recommended that Windows users install some kind of Linux or Unix based shell to make this a little easier.
+
+You can pass additional arguments to an npm script by using the -- arg.
+
+## eslint
+So let's now set up our linting script so that we can start using it in development. First we need to initialise `eslint`. To do that we need to pass the --init arg.
+```
+npm run lint -- --init
+```
+Answer the questions to set up your configuration. Here are some typical responses.
+```
+? How would you like to use ESLint?
+    To check syntax, find problems, and enforce code style
+
+? What type of modules does your project use?
+    JavaScript modules (import/export)
+
+? Which framework does your project use?
+    None of these
+
+? Where does your code run?
+    Node
+
+? How would you like to define a style for your project?
+    Use a popular style guide
+
+? Which style guide do you want to follow?
+    Airbnb (https://github.com/airbnb/javascript)
+
+? What format do you want your config file to be in?
+    JavaScript
+
+Checking peerDependencies of eslint-config-airbnb-base@latest
+The config that you've selected requires the following dependencies:
+
+eslint-config-airbnb-base@latest eslint@^4.19.1 || ^5.3.0
+eslint-plugin-import@^2.14.0
+
+? Would you like to install them now with npm?
+    Yes
+```
+This process will install additional dev dependencies in `package.json`
+```
+  "devDependencies": {
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.17.3",
+  }
+```
+and create an `.eslint.js` file
+```
+module.exports = {
+  env: {
+    commonjs: true,
+    es6: true,
+    node: true,
+  },
+  extends: 'airbnb-base',
+  globals: {
+    Atomics: 'readonly',
+    SharedArrayBuffer: 'readonly',
+  },
+  parserOptions: {
+    ecmaVersion: 2018,
+  },
+  rules: {
+  },
+};
+```
+by specifying a preference for using an industry style guide  you get various linting rules for free. Over time you may choose to add new ones or turn some of them off. That's what the `rules` entry in `.eslint.js` is for. For example:
+```
+rules: {
+  "no-confusing-arrow": 0,
+  "implicit-arrow-linebreak": 0,
+  "no-shadow": 0,
+  "consistent-return": 0,
+  "comma-dangle": 0,
+  "padded-blocks": 0,
+  "object-curly-newline": 0,
+  "no-param-reassign": 0,
+  "no-return-assign": 0,
+}
 ```
 # async operations
 Asynchronous operations are actions that happen at some time in the future. Because node is a single-threaded architecture in which everything that happens on the main thread is synchrononous, node must relinquish control of the main thread regularly in order for asynchronous operations to get a chance of happening.
