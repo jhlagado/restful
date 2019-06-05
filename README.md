@@ -447,6 +447,8 @@ rules: {
   "no-return-assign": 0,
 }
 ```
+## nodemon
+
 # async operations
 Asynchronous operations are actions that happen at some time in the future. Because node is a single-threaded architecture in which everything that happens on the main thread is synchrononous, node must relinquish control of the main thread regularly in order for asynchronous operations to get a chance of happening.
 
