@@ -11,9 +11,15 @@ const getRoutes = (database, listUrl, itemUrl) => {
     })
 
     .get((req, res) => {
+      console.log(listUrl.indexOf('companies'));
       database.find(req.query)
         .catch(err => res.send(err))
-        .then(list => res.render('customers',{ customers: list }));
+        .then(list => {
+          if(listUrl.indexOf('companies')!==-1){
+            return res.render('companies',{ companies: list });
+          }
+          return res.render('customers',{ customers: list })
+        });
     });
 
   router.route(itemUrl)

@@ -1,0 +1,21 @@
+<% include _header %>
+
+<h1>Companies Page</h1>
+
+<% companies.forEach(function(company) { %>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <a href="api/companies/<%= company.id %>">
+        <%= company.company%>
+      </a>
+    </div>
+  
+    <div class="panel-body"><%= company.email %></div>
+  
+  </div>
+
+<% }) %>
+
+
+<% include _footer %>
