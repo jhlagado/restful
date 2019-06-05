@@ -1,16 +1,21 @@
+<% include _header %>
+
 <h1>Customers Page</h1>
 
 <% customers.forEach(function(customer) { %>
 
   <div class="panel panel-default">
     <div class="panel-heading">
-      <a href="/customer/<%= customer.id %>">
-        <%= customer.first_name %>
+      <a href="api/customers/<%= customer.id %>">
+        <%= customer.first_name + " "+ customer.last_name %>
       </a>
     </div>
-    <% if (customer.bio) { %>
-      <div class="panel-body"><%= customer.bio %></div>
-    <% } %>
+  
+    <div class="panel-body"><%= customer.email %></div>
+  
   </div>
 
 <% }) %>
+
+
+<% include _footer %>
