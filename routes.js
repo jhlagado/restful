@@ -13,7 +13,7 @@ const getRoutes = (database, listUrl, itemUrl) => {
     .get((req, res) => {
       database.find(req.query)
         .catch(err => res.send(err))
-        .then(list => res.json(list));
+        .then(list => res.render('customers',{ customers: list }));
     });
 
   router.route(itemUrl)

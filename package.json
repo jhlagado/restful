@@ -16,7 +16,8 @@
     "debug": "^4.1.1",
     "express": "^4.17.0",
     "morgan": "^1.9.1",
-    "nodemon": "^1.19.1"
+    "nodemon": "^1.19.1",
+    "ejs": ">=2.5.5"
   },
   "devDependencies": {
     "eslint": "^5.16.0",
