@@ -12,15 +12,12 @@ const source = path.join(__dirname, '..', 'source');
 const dest = path.join(__dirname, 'dest');
 
 accessAsync(dest)
-  .catch(() => mkdirAsync(dest, { recursive: true }))
-  .finally(() =>
-    readdirAsync(source)
-      .then(srcFiles => srcFiles.forEach(
-        (filename) => {
-          const srcFilePath = path.join(source, filename);
-          const destFilePath = path.join(dest, filename);
-          readFileAsync(srcFilePath, 'utf-8')
-            .then(string => writeFileAsync(destFilePath, string + string))
-            .then(() => console.log('done!'));
-        }
-      )));
+  .catch(() => mkdirAsync(dest))
+  .finally(() => readdirAsync(source)
+    .then(srcFiles => srcFiles.forEach((filename) => {
+      const srcFilePath = path.join(source, filename);
+      const destFilePath = path.join(dest, filename);
+      readFileAsync(srcFilePath, 'utf-8')
+        .then(string => writeFileAsync(destFilePath, string + string))
+        .then(() => console.log('done!'));
+    })));
