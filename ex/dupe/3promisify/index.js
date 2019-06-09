@@ -8,15 +8,19 @@ const accessAsync = promisify(fs.access);
 const mkdirAsync = promisify(fs.mkdir);
 const writeFileAsync = promisify(fs.writeFile);
 
-const source = path.join(__dirname, '..', 'source');
-const dest = path.join(__dirname, 'dest');
+const sourceDir = path.join(__dirname, '..', 'source');
+const destDir = path.join(__dirname, 'dest');
 
-accessAsync(dest)
-  .catch(() => mkdirAsync(dest))
-  .finally(() => readdirAsync(source)
+accessAsync(destDir)
+  .catch(() => mkdirAsync(destDir))
+  .finally(() => readdirAsync(sourceDir)
     .then(srcFiles => srcFiles.forEach((filename) => {
-      const srcFilePath = path.join(source, filename);
-      const destFilePath = path.join(dest, filename);
+      const ext = path.extname(filename);
+      if (ext !== '.txt') {
+        throw new Error(`file ${filename} is not a valid file`);
+      }
+      const srcFilePath = path.join(sourceDir, filename);
+      const destFilePath = path.join(destDir, filename);
       readFileAsync(srcFilePath, 'utf-8')
         .then(string => writeFileAsync(destFilePath, string + string))
         .then(() => console.log('done!'));

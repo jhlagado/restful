@@ -1,16 +1,22 @@
 const fs = require('fs').promises;
 const path = require('path');
 
-const source = path.join(__dirname, '..', 'source');
-const dest = path.join(__dirname, 'dest');
+const sourceDir = path.join(__dirname, '..', 'source');
+const destDir = path.join(__dirname, 'dest');
 
-fs.access(dest)
-  .catch(() => fs.mkdir(dest))
-  .finally(() => fs.readdir(source)
-    .then(srcFiles => srcFiles.map((filename) => {
-      const srcFilePath = path.join(source, filename);
-      const destFilePath = path.join(dest, filename);
-      return fs.readFile(srcFilePath, 'utf-8')
-        .then(string => fs.writeFile(destFilePath, string + string));
-    })).then(promises =>
-      Promise.all(promises).then(() => console.log('done!'))));
+fs.access(destDir)
+  .catch(() => fs.mkdir(destDir))
+  .finally(() => fs.readdir(sourceDir)
+    .then((srcFiles) => {
+      const promises = srcFiles.map((filename) => {
+        const ext = path.extname(filename);
+        if (ext !== '.txt') {
+          throw new Error(`file ${filename} is not a valid file`);
+        }
+        const srcFilePath = path.join(sourceDir, filename);
+        const destFilePath = path.join(destDir, filename);
+        return fs.readFile(srcFilePath, 'utf-8')
+          .then(string => fs.writeFile(destFilePath, string + string));
+      });
+      Promise.all(promises).then(() => console.log('done!'));
+    }));

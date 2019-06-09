@@ -1,19 +1,23 @@
 const fs = require('fs').promises;
 const path = require('path');
 
-const source = path.join(__dirname, '..', 'source');
-const dest = path.join(__dirname, 'dest');
+const sourceDir = path.join(__dirname, '..', 'source');
+const destDir = path.join(__dirname, 'dest');
 
 const run = async () => {
   try {
-    await fs.access(dest);
+    await fs.access(destDir);
   } catch (err) {
-    await fs.mkdir(dest);
+    await fs.mkdir(destDir);
   }
-  const srcFiles = await fs.readdir(source);
+  const srcFiles = await fs.readdir(sourceDir);
   srcFiles.forEach(async (filename) => {
-    const srcFilePath = path.join(source, filename);
-    const destFilePath = path.join(dest, filename);
+    const ext = path.extname(filename);
+    if (ext !== '.txt') {
+      throw new Error(`file ${filename} is not a valid file`);
+    }
+    const srcFilePath = path.join(sourceDir, filename);
+    const destFilePath = path.join(destDir, filename);
     const string = await fs.readFile(srcFilePath, 'utf-8');
     await fs.writeFile(destFilePath, string + string);
     console.log('done!');
