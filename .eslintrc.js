@@ -22,5 +22,6 @@ module.exports = {
     "object-curly-newline": 0,
     "no-param-reassign": 0,
     "no-return-assign": 0,
+    "no-nested-ternary": 0,
   }
 };

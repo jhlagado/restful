@@ -1,7 +1,6 @@
 const express = require('express');
 const path = require('path');
 
-const { promisifyAPI } = require('../util');
 const { getDatabase } = require('../db');
 const { getListRoutes, getItemRoutes } = require('../route-util');
 
@@ -12,7 +11,6 @@ const allowedKeys = [
 ];
 
 module.exports = getDatabase(filename, allowedKeys, 2500)
-  .then(database => promisifyAPI(database, 1000))
   .then((database) => {
     const router = express.Router();
     getListRoutes(router.route('/companies'), database);

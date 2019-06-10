@@ -22,12 +22,20 @@ const getItemRoutes = (route, database) => {
     .all((req, res, next) => {
       const { id } = req.params;
       database.findById(id)
-        .catch(err => res.send(err))
-        .then(item => req.item = item)
+        .then(item =>
+          req.item = item)
+        .catch(err =>
+          req.err = err)
         .finally(() => next());
     })
 
-    .get((req, res) => res.json(req.item))
+    .get((req, res) => {
+      if (req.err) {
+        res.status(404).send(req.err.message);
+      } else {
+        res.json(req.item);
+      }
+    })
 
     .put((req, res) => {
       const object = {
@@ -41,7 +49,7 @@ const getItemRoutes = (route, database) => {
 
     .delete((req, res) =>
       database.delete(req.item)
-        .catch(err => res.send(err))
+        .catch(err => res.status(404).send(err))
         .then(() => res.send('Item deleted')));
 };
 
