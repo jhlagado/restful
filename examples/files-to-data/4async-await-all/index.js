@@ -2,10 +2,11 @@ const fs = require('fs').promises;
 const path = require('path');
 
 const loadFile = sourceDir => async (filename) => {
-  const text = await fs.readFile(
-    path.join(sourceDir, filename), 'utf-8'
-  );
-  return JSON.parse(text);
+  const srcFilePath = path.join(sourceDir, filename);
+  const text = await fs.readFile(srcFilePath, 'utf-8');
+  const item = JSON.parse(text);
+  if (!item.id) throw new Error('Format error: expected item to contain "id"');
+  return item;
 };
 
 const saveData = (destPath, data) => {

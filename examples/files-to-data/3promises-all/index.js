@@ -1,9 +1,15 @@
 const fs = require('fs').promises;
 const path = require('path');
 
-const loadFile = sourceDir => filename =>
-  fs.readFile(path.join(sourceDir, filename), 'utf-8')
-    .then(text => JSON.parse(text));
+const loadFile = sourceDir => (filename) => {
+  const srcFilePath = path.join(sourceDir, filename);
+  fs.readFile(srcFilePath, 'utf-8')
+    .then((text) => {
+      const item = JSON.parse(text);
+      if (!item.id) throw new Error('Format error: expected item to contain "id"');
+      return item;
+    });
+};
 
 const saveData = (destPath, data) => {
   data.sort((item1, item2) => item1.id - item2.id);

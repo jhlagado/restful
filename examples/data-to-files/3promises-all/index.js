@@ -5,9 +5,7 @@ const loadData = srcPath =>
   fs.readFile(srcPath, 'utf8')
     .then((text) => {
       const data = JSON.parse(text);
-      if (!Array.isArray(data)) {
-        throw new Error('Format error: expected array');
-      }
+      if (!Array.isArray(data)) throw new Error('Format error: expected array');
       return data;
     });
 

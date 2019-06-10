@@ -5,7 +5,9 @@ const loadFile = (sourceDir, callback) => (filename) => {
   const srcFilePath = path.join(sourceDir, filename);
   fs.readFile(srcFilePath, 'utf-8', (err, text) => {
     if (err) return callback(err);
-    callback(null, JSON.parse(text));
+    const item = JSON.parse(text);
+    if (!item.id) throw new Error('Format error: expected item to contain "id"');
+    callback(null, item);
   });
 };
 

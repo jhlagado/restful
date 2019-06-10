@@ -4,9 +4,7 @@ const path = require('path');
 const loadData = async (srcPath) => {
   const text = await fs.readFile(srcPath, 'utf8');
   const data = JSON.parse(text);
-  if (!Array.isArray(data)) {
-    throw new Error('Format error: expected array');
-  }
+  if (!Array.isArray(data)) throw new Error('Format error: expected array');
   return data;
 };
 

@@ -4,7 +4,9 @@ const path = require('path');
 const loadFile = sourceDir => (filename) => {
   const srcFilePath = path.join(sourceDir, filename);
   const text = fs.readFileSync(srcFilePath, 'utf-8');
-  return JSON.parse(text);
+  const item = JSON.parse(text);
+  if (!item.id) throw new Error('Format error: expected item to contain "id"');
+  return item;
 };
 
 const saveData = (destPath, data) => {

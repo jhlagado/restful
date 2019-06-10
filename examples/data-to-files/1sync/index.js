@@ -23,7 +23,6 @@ try {
 } catch (err) {
   fs.mkdirSync(destDir);
 }
-
 const data = loadData(srcFilePath);
 try {
   data.forEach(saveFile(destDir));
