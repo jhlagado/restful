@@ -720,23 +720,96 @@ const server = http.createServer((req, res) => {
 server.listen(port, () =>
   console.log(`Listening on port ${port}`));
 ```
-We start this server
-## express
-express more powerful server
-very simple express server
+We can start this server by
+```
+node examples/http
+```
+By setting the PORT variable in the environment, this server can be started on another port. This is an operating system specific thing but in a bash shell you can set environment variables on the command line eg.
+```js
+PORT=2233 node examples/http
+```
+## Express
+While simple the `http` module lacks an easy way to configure routes and other features so you are on your own. Express is a more powerful  framework.
+
+Here is a basic Express server.
+```js
+const express = require('express');
+
+const port = process.env.PORT || 3000;
+
+const app = express();
+
+app.get('/', (req, res) => {
+  res.send(`
+    Hello World!
+  `);
+});
+
+app.server = app.listen(port, () => {
+  console.log(`Listening on port ${port}`);
+});
+```
+Which we can start with
+```
+node examples/express/index-1.js
+```
+or by specifying the PORT in the environment
+```
+PORT=2233 node examples/express/index.js
+```
+## nodemon
+Because are often modifying server code we need to restart the server frequently. We can do this more coveniently by using the `nodemon` utility.
+
+`nodemon` watches all the files in your node project and restarts the server each time.
+
+You can install `nodemon` as a dev dependency.
+```
+npm i nodemon -D
+```
+and run it either from as a script in `package.json`
+```
+  "scripts": {
+    "start": "PORT=2233 nodemon examples/express/index.js"
+  }
+```
+or by using `npx`
+```
+PORT=2233 npx nodemon examples/express/index.js
+```
+### nodemon configuration
+`nodemon` has many options on its command line. It's usually more convenient to set up a configuration section for `nodemon` in your `package.json`
+```
+"nodemonConfig": {
+  "ignore": "node_modules/**/node_modules",
+  "delay": 2500,
+  "env": {
+    "NODE_ENV": "development",
+    "PORT": 4000,
+    "DEBUG": "app,app*"
+  }
+}
+```
+# Express middleware
+
+Getting back to Express, a lot of functionality can be added to the server through so-called "middlware".
+
+A middleware is simply a function with the signature
+```js
+(req, res, next) => {
+  //do something
+  next();
+}
+```
+Most middlewares append or modify the `req` or `res` objects. The last thing a middleware must do is call the `next()` function to pass execution on. If this is forgotten, the server will just hang.
+
+To use a middleware, the usual thing is to call the `use()` method on the server.
+
 
 # debug
 # logging
 # env DEBUG
+# routes
 
-routes
-middleware
-
-## nodemon
-auto restarting, very useful for servers
-
-### configuration
-#### environment
 
 npm install express
 
