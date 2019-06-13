@@ -1,3 +1,9 @@
+# Todo
+
+npm registry
+npm RC
+Publish npm packages
+
 # npm
 Npm is the node package manager which connects your app to
 the Npm registry, the world's largest registry by far.
