@@ -343,7 +343,8 @@ This updates the `devDependencies` section in your `package.json`. eg.
   "eslint": "^5.16.0",
 }
 ```
-## scripts
+## running
+
 Unless you add something to your path, tools that have been installed in your node_modules are a little inconvenient to run.
 
 For example to run eslint on the files in the root directory of your project you might type
@@ -352,7 +353,15 @@ For example to run eslint on the files in the root directory of your project you
 ```
 You will usually find a shortcut to your tool in the `.bin` directory but this is still too wordy for most uses.
 
-Far better is to add a script entry to your `package.json` to make it available from npm. Any entry you place in the `scripts` section of `package.json` can be executed by npm run. For example if we add an entry called `lint`
+## npx
+
+Far better than typing the path to the `.bin` directory is to run them with npx.
+```
+npx eslint .
+```
+
+## scripts
+Another way is to add a script entry to your `package.json` to make it available from npm. Any entry you place in the `scripts` section of `package.json` can be executed by npm run. For example if we add an entry called `lint`
 ```
 "scripts": {
   "lint": "eslint ."
@@ -447,7 +456,6 @@ rules: {
   "no-return-assign": 0,
 }
 ```
-## nodemon
 
 # async operations
 Asynchronous operations are actions that happen at some time in the future. Because node is a single-threaded architecture in which everything that happens on the main thread is synchrononous, node must relinquish control of the main thread regularly in order for asynchronous operations to get a chance of happening.
@@ -665,17 +673,64 @@ const coinToss = new Promise((resolve, reject) =>
 );
 ```
 
-# ----
+## http
 
+`http` is another module that is built into Node. It provides everything needed to set up an http server. Except in very simple cases however most developers prefer to use a framework to build web servers on node. The most popular of these in called Express which we will come to shortly.
+
+For now let's just look at setting up a very simple web server using `http`.
+```js
+const http = require('http');
+
+const port = process.env.PORT || 3000;
+
+const server = http.createServer((req, res) => {
+
+  const { url, method } = req;
+
+  if (method === 'POST' && url === '/users') {
+
+    res.writeHead(200, { 'Content-Type': 'text/json' });
+    res.write(`
+      {
+        "users": [1,2,3]
+      }
+    `);
+    res.end();
+
+  } else {
+
+    res.writeHead(200, { 'Content-Type': 'text/html' });
+    res.write(`
+      <form method='POST' action='/users'>
+        Hello World!
+        <p><button>OK</button></p>
+      </form>
+    `);
+    res.end();
+
+  }
+});
+
+server.listen(port, () =>
+  console.log(`Listening on port ${port}`));
+```
+We start this server
 ## express
+express more powerful server
+very simple express server
 
-## nodemon
-### configuration
-### environment
 # debug
 # logging
 # env DEBUG
 
+routes
+middleware
+
+## nodemon
+auto restarting, very useful for servers
+
+### configuration
+#### environment
 
 npm install express
 
