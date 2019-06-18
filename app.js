@@ -8,10 +8,8 @@ app.use(morgan('tiny'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-require('routes/customers')
+require('./routes/customers')
   .then(customers => app.use('/api', customers));
-require('routes/companies')
-  .then(companies => app.use('/api', companies));
 
 app.get('/', (_req, res) => {
   res.redirect('/api/customers');

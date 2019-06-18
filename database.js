@@ -1,11 +1,55 @@
 const debug = require('debug')('app-db');
 const fs = require('fs').promises;
 
-const {
-  pickProps, debounce, containsText
-} = require('./util');
+/**
+ * Checks if string value1 contains the text of value2
+ *
+ * @param { string } value1
+ * @param { string } value2
+ * @returns { boolean }
+ */
+const containsText = (value1, value2) =>
+  value1 == null ? false : value1.includes(value2);
 
 /**
+ * Creates a debounced function that delays 
+ * invoking func until after wait milliseconds
+ *
+ * @param {(...args: any) => void} func
+ * @param {number} wait
+ */
+const debounce = (func, wait) => {
+  let timeout = null;
+  /**
+   * @param {any[]} args
+   */
+  return (...args) => {
+    const next = () => func(...args);
+    clearTimeout(timeout);
+    timeout = setTimeout(next, wait);
+  };
+};
+
+/**
+ * Creates an object composed of the picked object properties.
+ *
+ * @param { string[] } keys
+ * @param {{}} object
+ * @returns {{}}
+ */
+const pickProps = (keys, object) => keys.reduce(
+  (acc, key) => {
+    if (key in object) {
+      acc[key] = object[key];
+    }
+    return acc;
+  },
+  {},
+);
+
+/**
+ * Creates a simplistic database object which can be queried for database
+ * 
  * @param {String} filename
  * @param {any} allowedKeys
  * @param {number} persistDelay
@@ -27,6 +71,8 @@ const getDatabase = async (filename, allowedKeys, persistDelay) => {
   return {
 
     /**
+     * Creates an object in database
+     *
      * @param {any} object
      */
     async create(object) {
@@ -46,6 +92,8 @@ const getDatabase = async (filename, allowedKeys, persistDelay) => {
     },
 
     /**
+     * Finds object in database that match query
+     *
      * @param {{}} query
      */
     async find(query) {
@@ -58,6 +106,8 @@ const getDatabase = async (filename, allowedKeys, persistDelay) => {
     },
 
     /**
+     * Finds object in database that has id
+     *
      * @param {string} id
      */
     async findById(id) {
@@ -71,6 +121,8 @@ const getDatabase = async (filename, allowedKeys, persistDelay) => {
     },
 
     /**
+     * Updates properies in an object with a given id
+     * 
      * @param {any} object
      */
     async update(object) {
@@ -92,6 +144,8 @@ const getDatabase = async (filename, allowedKeys, persistDelay) => {
     },
 
     /**
+     * Deletes an object with a given id
+     * 
      * @param {{ id: any; }} object
      */
     async delete(object) {
