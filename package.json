@@ -4,10 +4,8 @@
   "description": "backend restful service",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon app.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "eslint .",
-    "ex-http": "nodemon ex/http"
+    "start": "nodemon bin/www",
+    "lint": "eslint ."
   },
   "author": "",
   "license": "ISC",
@@ -29,7 +27,7 @@
     "delay": 2500,
     "env": {
       "NODE_ENV": "development",
-      "PORT": 4000,
+      "PORT": "4000",
       "DEBUG": "app,app*"
     }
   }

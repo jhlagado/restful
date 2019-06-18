@@ -4,7 +4,7 @@ const path = require('path');
 const { getDatabase } = require('../db');
 const { getListRoutes, getItemRoutes } = require('../route-util');
 
-const filename = path.join(__dirname, 'data.json');
+const filename = path.join(__dirname, '../data/companies.json');
 const allowedKeys = [
   'company', 'email', 'domain', 'address',
   'city', 'country',
