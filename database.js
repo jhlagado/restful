@@ -12,7 +12,7 @@ const containsText = (value1, value2) =>
   value1 == null ? false : value1.includes(value2);
 
 /**
- * Creates a debounced function that delays 
+ * Creates a debounced function that delays
  * invoking func until after wait milliseconds
  *
  * @param {(...args: any) => void} func
@@ -49,7 +49,7 @@ const pickProps = (keys, object) => keys.reduce(
 
 /**
  * Creates a simplistic database object which can be queried for database
- * 
+ *
  * @param {String} filename
  * @param {any} allowedKeys
  * @param {number} persistDelay
@@ -122,7 +122,7 @@ const getDatabase = async (filename, allowedKeys, persistDelay) => {
 
     /**
      * Updates properies in an object with a given id
-     * 
+     *
      * @param {any} object
      */
     async update(object) {
@@ -145,7 +145,7 @@ const getDatabase = async (filename, allowedKeys, persistDelay) => {
 
     /**
      * Deletes an object with a given id
-     * 
+     *
      * @param {{ id: any; }} object
      */
     async delete(object) {
