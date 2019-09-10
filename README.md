@@ -1,10 +1,304 @@
-# Todo
+# Node JS Workshop
+September 16, 2019
 
-npm registry
-npm RC
-Publish npm packages
+---
+# Workshop Agenda
+| Morning                 | Afternoon
+| ----------------------- |--------------------------
+| Modern JavaScript       |Serving HTTP
+| Node Architecture       |Express
+| NPM                     |Middleware
+| Dev dependencies        |Logging
+| Global & module vars    |Routes
+| Imports rel & abs paths |Brief intro to Mongo
+| Exports                 |Examples
+| Debugging               |Templates & Authentication
+| Asynchronous operations |Using view templates
+| Built-in fs module      |Express PUG middleware
+| Built-in path module    |Authentication
+| “Callback Hell”         |Login view
+| Promises                |Member view
+| Promise error handling  |Summary
+| Async/await             |Recommended study
+| Examples                |
 
-# npm
+---
+# Modern JavaScript
+The JavaScript language is nearly 25 years old however since 2016 the language has been significantly upgraded with new features. This enhanced version of the language is referred to variously as ECMAScript 2016, 2017, 2018, 2019 or ES6, ES7, ES8, ES9, ES10 and ESNext.
+
+Rather than dwell too much on version numbers just be aware than most Node development takes place using modern Javascript features. Meanwhile front-end code which needs compatibility with Internet Explorer 11 deploys code which is called ES5. Modern browsers such as Chrome, Firefox, Safari,Opera and Edge can use modern JavaScript. These browsers, which upgrade themselves regularly are known as "evergreen" browsers.
+
+---
+## Features of Modern JavaScript
+
+This is not an exhaustive list of the new features of JavaScript but includes most of the important ones.
+
+- let & const
+- arrow functions
+- spreading
+- destructuring
+- default arguments
+- template strings
+- classes
+- import and export
+- dynamic imports
+- iterators & for..of
+- generators
+- promises
+- async/await
+- Maps, Sets, WeakMaps, WeakSets
+- proxies
+
+---
+## let & const
+These new keywords allow decalring variables that are scoped to a block of code instead of a function. Declarations are usually declared as `const` but when a name need to be reused you can declare them as `let`.
+
+```
+const x = 1;
+x = 2; // error
+```
+```
+let x = 1;
+x = 2; // OK
+```
+
+NOTE: just because a variable has been declared as `const` this only refers to the name binding, it doesn't prevent a variable from being mutated.
+
+---
+## Arrow functions
+JavaScript now has a more convenient syntax for declaring anonymous lambda functions. Unlike the traditional `function` syntax, arrow functions have no implied variables called `this` or `arguments`.
+
+```
+// traditional function
+function add(a, b) {
+  return a + b;
+}
+```
+```
+const fun = (a, b) => a + b;
+```
+If the function body can be expressed as a single expression then there is no need for a return statement.
+
+If several lines of code are needed to express the body of the function then braces are used to indicate a code block and a return statement is required;
+```
+const fun = (a, b) => {
+  const result = a + b;
+  return result;
+};
+```
+If an arrow function needs to return an object then it needs to be wrapped in parentheses so it won't be mistake for a code block;
+```
+const fun = () => ({a: 1});
+```
+If an arrow function only has one argument then you can drop the parentheses from the argument declaration.
+```
+const fun = (a) => a + 1;
+```
+```
+const fun = a => a + 1;
+```
+## Spreading
+It is now much easier to copy and compose arrays and objects
+```
+const a = [1,2,3];
+const b = [...a, 4]; // [1,2,3,4]
+const c = [...a, 4, ...a]; // [1,2,3,4,1,2,3]
+```
+```
+const x = {a: 1, b: 2};
+
+const y1 = {...x, c: 3}; // {a: 1, b: 2, c: 3}
+const y2 = {...x, a: 4}; // {a: 4, b: 2}
+const y3 = {...x, ...{a: 4, c: 3}}; // {a: 4, b: 2, c: 3}
+```
+When used in this way, ... is referred to as the "spread" operator.
+
+---
+## Destructuring
+Many of the operations that you can do on the right-hand side of the `=` you can also do on the left-hand side.
+
+```
+const x = 1;
+const x = [1,2,3];
+const [x, y, ...z] = [1,2,3,4]; // x = 1, y = 2, z = [3,4]
+const [x] = [1,2,3,4]; // x = 1
+const [,,x] = [1,2,3,4]; // x = 3
+```
+```
+const x = 1;
+const y = 1;
+[y, x] = [x, y]; //swap x with y
+```
+```
+const fun = (a, ...b) => {
+  // do something
+}
+fun(1,2,3,4); // arg a = 1, arg b = [2,3,4]
+```
+```
+
+const {a} = {a: 1}; // a = 1
+const {a: b} = {a: 1}; // b = 2 🤯
+const {a, ...b} = {a: 1, b: 2, c: 3}; // a = 1, b = {b: 2, c:3}
+```
+The last example is a good way to exclude a key from an object.
+On the left hand side and for function arguments, ... is referred to as the "rest" operator. It can only be used in the last position.
+```
+const [x, y, ...z] = [1,2,3,4]; //this works
+const [...x, y, z] = [1,2,3,4]; //this doesn't
+```
+---
+## Default arguments
+
+Function arguments can now be optional and can take a default value. If you don't pass an argument, or you pass `undefined` as an argument, it will use the default value.
+```
+const f = (a=2, b=3) => a + b
+f(1); // 4
+f(undefined, 10); // 12
+```
+---
+## Template strings
+JavaScript now offers multi-line strings which merge values from the scope without needing concatnation operations.
+
+Old style
+```
+const name = 'John';
+const x = 'Hello,\n' + name + '.\n G'day!';
+```
+New style
+```
+const name = 'John';
+const x = `Hello,
+${name}.
+G'day!`;
+```
+Both output
+```
+Hello,
+John.
+G'day!
+```
+---
+## Classes
+Old style
+```
+const NewClass = function (x) {
+  this.x = x;
+}
+NewClass.prototype = Object.create(
+  OldClass.prototype);
+NewClass.prototype.getX = function() {
+  return this.x;
+}
+```
+New style
+```
+class NewClass extends OldClass {
+  constructor(x) {
+    super();
+    this.x = x;
+  }
+  getX() {
+    return this.x;
+  }
+}
+```
+Usage:
+```
+const obj = new NewClass(100);
+console.log(obj.getX());
+```
+---
+## Import and export
+Modern JavScript has modules and the ability to import and export from these modules.
+```
+// filename: md.js
+export const x = 123
+```
+```
+import {x} from 'md.js'
+```
+NOTE: Node has its own way of handling modules (know as the CommonJS format) and has not fully integrated the modern JavaScript way. As we will see Node uses a different syntax for importing and exporting values.
+
+Soon Node will fully support modern JavScript modules by right now that functionality is hidden behind a feature switch.
+
+---
+## Dynamic imports
+
+Modern JavaScript can dynamically import values at runtime. This enables lazy-loading modules as needed. When you load a module, JavaScript handles this with a "promise". More about this shortly.
+```
+import('module.js').then(mod => {
+  console.log(`this is the value of x: ${mod.x});
+})
+
+```
+As mentioned above, Node handles modules differently and we will use the Node way of loading and importing modules in this workshop.
+
+---
+## Iterators & for ... of
+Modern JavaScript defines the concept of an Iterable which is an functional interface supported by many JavScript types.
+
+Examples of Iterables are Arrays and Strings but you can create your own as well. Objects which are Iterable mean that they can be interated over. It means that you can use the spread and rest operator ... on them and you can also use the `for..of` contruct for looping.
+
+For example, the traditional way to loop over an array
+```
+  const array = [1,2,3,4,5];
+
+  for (let i = 0; i < array.length; i++) {
+    console.log(array[i]);
+  }
+```
+Here is the modern way to loop over an array. This works because arrays implement the Iterable interface.
+```
+  const array = [1,2,3,4,5];
+
+  for (let item of array) {
+    console.log(array[i]);
+  }
+```
+`for..of` loops are good for preventing common "off-by-one" bugs.
+
+---
+## Promises
+
+Promises are a way for dealing with asynchonicity in JavaScript in a single-threaded environment. This is a complex subject and one we will discuss in detail a bit later because it is very important in Node.
+```
+readFilePromise('file.txt')
+.catch(err =>
+  console.log(`an error occured ${err}`))
+.then(content =>
+  console.log(`Content: ${content}`)
+)
+```
+---
+## Generators
+
+Generators are a powerful mechanism for simplifying the process of writing iterators and making objects Iterable. We won't be covering this topic in any detail during this workshop but be aware that many useful things can be written using generators. Also it's worth mentioning that a very popular mechanism called async/await in JavaScript is implmented under the hood with generators.
+
+---
+## Async/await
+Async/await is an advanced feature for writing asynchronous code which is implemented using promises and generators. We will be discussing async/await in much more detail because this is also important in Node.
+```
+async function f() {
+  try {
+    const content = readFilePromise('file.txt');
+    console.log(`Content: ${content}`)
+  catch (err) {
+    console.log(`an error occured ${err}`);
+  }
+}
+
+f();
+```
+
+---
+## Maps, Sets, WeakMaps, WeakSets
+
+---
+## Proxies
+
+---
+# NPM
 Npm is the node package manager which connects your app to
 the Npm registry, the world's largest registry by far.
 ## npm init
@@ -934,3 +1228,8 @@ adding routes
 move  example routes toa  file called routes
 explain module exports
 
+# Todo
+
+- npm registry
+- npm RC
+- Publish npm packages
