@@ -4,7 +4,7 @@ September 16, 2019
 ---
 # Workshop Agenda
 | Morning                 | Afternoon
-| ----------------------- |--------------------------
+| ----------------------- |-------------
 | Modern JavaScript       |Serving HTTP
 | Node Architecture       |Express
 | NPM                     |Middleware
@@ -33,21 +33,23 @@ Rather than dwell too much on version numbers just be aware than most Node devel
 
 This is not an exhaustive list of the new features of JavaScript but includes most of the important ones.
 
-- let & const
-- arrow functions
-- spreading
-- destructuring
-- default arguments
-- template strings
-- classes
-- import and export
-- dynamic imports
-- iterators & for..of
-- generators
-- promises
-- async/await
-- Maps, Sets, WeakMaps, WeakSets
-- proxies
+| Features
+|----
+| let & const
+| arrow functions
+| spreading
+| destructuring
+| default arguments
+| template strings
+| classes
+| import & export
+| dynamic imports
+| iterators & for..of
+| generators
+| promises
+| async/await
+| Maps & Sets
+| proxies
 
 ---
 ## let & const
@@ -63,6 +65,37 @@ x = 2; // OK
 ```
 
 NOTE: just because a variable has been declared as `const` this only refers to the name binding, it doesn't prevent a variable from being mutated.
+
+---
+## Enhanced object literals
+### Object key expressions
+```
+const x = 'aaa';
+
+const obj = {
+  [x]: 123
+}
+
+// { aaa: 123 }
+```
+### Method fuction shorthand
+Old way
+```
+{
+  sayHello: function() {
+    console.log('hello!');
+  }
+}
+```
+New way
+```
+{
+  sayHello() {
+    console.log('hello!');
+  }
+}
+
+```
 
 ---
 ## Arrow functions
@@ -101,14 +134,18 @@ const fun = a => a + 1;
 It is now much easier to copy and compose arrays and objects
 ```
 const a = [1,2,3];
+
 const b = [...a, 4]; // [1,2,3,4]
+
 const c = [...a, 4, ...a]; // [1,2,3,4,1,2,3]
 ```
 ```
 const x = {a: 1, b: 2};
 
 const y1 = {...x, c: 3}; // {a: 1, b: 2, c: 3}
+
 const y2 = {...x, a: 4}; // {a: 4, b: 2}
+
 const y3 = {...x, ...{a: 4, c: 3}}; // {a: 4, b: 2, c: 3}
 ```
 When used in this way, ... is referred to as the "spread" operator.
@@ -119,9 +156,14 @@ Many of the operations that you can do on the right-hand side of the `=` you can
 
 ```
 const x = 1;
+
 const x = [1,2,3];
-const [x, y, ...z] = [1,2,3,4]; // x = 1, y = 2, z = [3,4]
+
+const [x, y, ...z] =
+[1,2,3,4]; // x = 1, y = 2, z = [3,4]
+
 const [x] = [1,2,3,4]; // x = 1
+
 const [,,x] = [1,2,3,4]; // x = 3
 ```
 ```
@@ -133,18 +175,22 @@ const y = 1;
 const fun = (a, ...b) => {
   // do something
 }
+
 fun(1,2,3,4); // arg a = 1, arg b = [2,3,4]
 ```
 ```
 
 const {a} = {a: 1}; // a = 1
+
 const {a: b} = {a: 1}; // b = 2 🤯
+
 const {a, ...b} = {a: 1, b: 2, c: 3}; // a = 1, b = {b: 2, c:3}
 ```
 The last example is a good way to exclude a key from an object.
 On the left hand side and for function arguments, ... is referred to as the "rest" operator. It can only be used in the last position.
 ```
 const [x, y, ...z] = [1,2,3,4]; //this works
+
 const [...x, y, z] = [1,2,3,4]; //this doesn't
 ```
 ---
@@ -153,7 +199,9 @@ const [...x, y, z] = [1,2,3,4]; //this doesn't
 Function arguments can now be optional and can take a default value. If you don't pass an argument, or you pass `undefined` as an argument, it will use the default value.
 ```
 const f = (a=2, b=3) => a + b
+
 f(1); // 4
+
 f(undefined, 10); // 12
 ```
 ---
@@ -185,8 +233,11 @@ Old style
 const NewClass = function (x) {
   this.x = x;
 }
+
 NewClass.prototype = Object.create(
-  OldClass.prototype);
+  OldClass.prototype
+);
+
 NewClass.prototype.getX = function() {
   return this.x;
 }
@@ -194,10 +245,12 @@ NewClass.prototype.getX = function() {
 New style
 ```
 class NewClass extends OldClass {
+
   constructor(x) {
     super();
     this.x = x;
   }
+
   getX() {
     return this.x;
   }
@@ -206,6 +259,7 @@ class NewClass extends OldClass {
 Usage:
 ```
 const obj = new NewClass(100);
+
 console.log(obj.getX());
 ```
 ---
@@ -264,11 +318,8 @@ Here is the modern way to loop over an array. This works because arrays implemen
 Promises are a way for dealing with asynchonicity in JavaScript in a single-threaded environment. This is a complex subject and one we will discuss in detail a bit later because it is very important in Node.
 ```
 readFilePromise('file.txt')
-.catch(err =>
-  console.log(`an error occured ${err}`))
-.then(content =>
-  console.log(`Content: ${content}`)
-)
+.catch(err => console.log(`an error occured ${err}`))
+.then(content => console.log(`Content: ${content}`));
 ```
 ---
 ## Generators
@@ -292,11 +343,58 @@ f();
 ```
 
 ---
-## Maps, Sets, WeakMaps, WeakSets
+## Maps & Sets
+Modern JavaScript has more efficient data structures for common algorithms. Whereas as normal JavaScript objects are often used as dictionary types for quick look up, this is not as efficient as using a Map or a Set for the same task. Better still, while JavaScript objects can only have strings as keys, Maps can use any object as a key.
+```
+// Map
+const m = new Map();
+m.set("hello", 42);
+m.set(s, 34);
+m.get(s) == 34;
+
+// Set
+const s = new Set();
+s.add("hello").add("goodbye").add("hello");
+s.size === 2;
+s.has("hello") === true;
+
+```
+
+### WeakMaps & WeakSets
+WeakMaps and WeakSets provide memory leak-free versions of Map and Set. The problem of holdinga  reference to an object in Map is that it won't get freed and cleaned up by the garbage collector. WeakMaps and WeakSets are a better choice for long living data-structures.
 
 ---
 ## Proxies
 
+Proxies are a powerful way to intercept and augment the behaviour of objects.
+
+Intercepting a get on a object
+```
+const target = {};
+
+const p = new Proxy(target, {
+  get(receiver, name) {
+    return `Hello, ${name}!`;
+  }
+});
+
+p.world;  // 'Hello, world!';
+
+```
+Intercepting a function call
+
+```
+const target = () => 'I am the target';
+
+const p = new Proxy(target, handler = {
+  apply(receiver, ...args) {
+    return 'I am the proxy';
+  }
+});
+
+p();   // 'I am the proxy';
+
+```
 ---
 # NPM
 Npm is the node package manager which connects your app to
