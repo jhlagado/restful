@@ -1109,15 +1109,17 @@ The uniqueness of Node's single-threaded architecture means that we need to do t
 
 # Asynchronous operations
 
-Asynchronous or async operations are actions that happen at some time in the future. Because node is a single-threaded architecture in which everything that happens on the main thread is synchrononous, node must relinquish control of the main thread regularly in order for asynchronous operations to get a chance of happening.
+Asynchronous or async operations are actions that happen at some time in the future. Because node is a single-threaded architecture in which everything that happens on the main thread is synchrononous, node must relinquish control of the main thread regularly in order for asynchronous operations to get a chance of being performed.
 
-Relinquishing control means letting code finish and complete tasks but being "called-back" by the system when the asynchronous results of some earlier operation have a result.
+Yielding control means letting code finish and complete tasks by being "called-back" by the system with the results of some earlier asynchronous operation.
 
 The most common patterns for asynchronous operations in JavaScript are
+
 * callbacks
 * promises
 * async/await
-A callback is a common pattern for event-driven software in the browser such as event listeners.
+
+A callback is a familiar pattern in browser based code. For example event listeners.
 
 Node uses the same event-driven architecture on the server to handle asynchronous operations such as file, network, database access so it's worth getting to know this pattern well.
 
@@ -1134,20 +1136,35 @@ The second argument is the result of the asynchronous operation.
 
 ## fs
 
-***** give examples using fs
+Let's look at a concrete example with Node's standard file reading functions.
 
-readFileSync
-readFile
-writeFileSync
-writeFile
+Synchronous
 
-***** timers
-setTimeout
-setImmediate
-nextTick
+```
+// blocks and returns a value
+readFileSync(filepath, encoding)
 
-# buffers
-# streams
+// blocks until complete
+writeFileSync(filepath, value)
+```
+Asynchronous
+```
+// doesn't block, calls back with error or value
+readFile(filepath, encoding, callback)
+
+//doesn't block, call back with error or nothing
+writeFile(filepath, value, callback)
+```
+
+
+
+
+
+
+
+
+
+
 
 ### "Callback Hell"
 
@@ -1479,6 +1496,10 @@ Most middlewares append or modify the `req` or `res` objects. The last thing a m
 
 To use a middleware, the usual thing is to call the `use()` method on the server.
 
+***** timers
+setTimeout
+setImmediate
+nextTick
 
 ---
 # Logging
