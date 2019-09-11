@@ -1011,7 +1011,9 @@ console.log({ value2 });
 
 This is *one way* to comunicate state between modules but as with global state, this is not recommended because without great care being exercised this can be a subtle source of bugs.
 
-## Global Scope
+---
+
+## Global scope
 Global scope is available everywhere in your programs through a single varibale called `global`.
 
 You can see `global` by
