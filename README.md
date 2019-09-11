@@ -11,7 +11,7 @@ September 16, 2019
 | Modern JavaScript       | Serving HTTP
 | Node Architecture       | Express
 | NPM                     | Middleware
-| The node command        | Logging
+| The Node command        | Logging
 | Modules                 | Routes
 | Debugging               | Mongo
 | Asynchronous operations | Templates
@@ -418,10 +418,10 @@ While proxies are not very commonly used they can become very useful when interc
 ---
 # NPM
 
-Npm is the node package manager which connects your app to
-the Npm registry, the world's largest registry by far.
+Npm is the package manager for the Node ecosystem. It connects your app to
+the Npm registry, by far the world's largest registry of software packages.
 
-## npm init
+## NPM init
 To initialise a new project, create an empty directory and run
 ```
 npm init
@@ -453,23 +453,26 @@ which will generate a package.json file like this:
   "license": "GPL"
 }
 ```
+---
 ## package.json
-```
-name              package name
-version           semantic version 0.0.0
-description       description
-main              entry filename "app.js",
-scripts           object containing named commands
-author            author's name
-license           licence, MIT, ISC, GPL tec
-dependencies      app dependencies
-devDependencies   tool dependencies
-```
+
+Field            | Value
+-----------------|-------------
+name             | package name
+version          | semantic version 0.0.0
+description      | description
+main             | entry filename "app.js",
+scripts          | object containing named commands
+author           | author's name
+license          | licence, MIT, ISC, GPL tec
+dependencies     | app dependencies
+devDependencies  | tool dependencies
+
 After initialising the project we can start adding dependencies.
 
-`dependencies` refer to modules that you need to import into your
-application while `devDependencies` refers to modules that are used
-by your development tools.
+`dependencies` refer to modules that you need to import into your application
+
+`devDependencies` refers to tool modules that are used for development, testing and deployment of your code.
 
 To install a module into your app type
 ```
@@ -479,28 +482,27 @@ or
 ```
 npm i <packname-name>
 ```
-this will download the package and store it in your application's
-`node_modules` directory and automatically add it to the
-`dependencies` section of your `package.json` file.
+this will download the package and store it in your application's `node_modules` directory and automatically add it to the `dependencies` section of your `package.json` file.
 
-You shou now find a node_modules directory, an updated `package.json`
-file and a `package-lock.json` which contains the versions of
-all of the installed packages.
+You should now find a node_modules directory in your projects folder. You'll also notice that your `package.json` file has been updated and a  `package-lock.json` file has been created which contains the version numbers of all of your installed packages.
 
 ## Installing dependencies
-For example when installing the utility package known as `chalk`,
-type
+
+For example let's try installing the utility package known as `chalk` into your project,
+
+In your terminal window type
 ```
 npm i chalk
 ```
-This command installs the dependency in `node_modules` and adds
-an entry to the `dependencies` section in `package.json`
+This command installs the dependency (and all of its dependencies) into the `node_modules` directory and adds an entry to the `dependencies` section in `package.json`
+
 ```
 "dependencies":
   "chalk": "^2.4.2"
 }
 ```
-dependencies are in the semantic version format
+Dependencies are in the semantic version format
+
 ```
 "<package-name>": "<semantic-version>",
 ```
@@ -513,19 +515,24 @@ where the three digits represent
 | +---- MINOR version when you add backwards-compatible functionality.
 +------ MAJOR version when you make breaking API changes.
 ```
-The `^` in the version `^2.4.2` represents the range of versions we
-will accept. `^2.4.2` means we will accept any version equal to or
-greater than version 2. If we want more precision and predictablilty
-we can remove the `^` so we only accept that exact version.
+
+The caret `^` in the version `^2.4.2` represents the range of versions we will accept when installing. `^2.4.2` means we will accept any version of the package that is equal to or greater than version 2.
+
+If we want more precision and predictablilty
+we can remove the `^` so we only accept that exact version. However, this means that you will need to manually upgrade your packages to handle bug-fixes and non-breaking changes.
+
 ```
 "dependencies":
   "chalk": "2.4.2"
 }
 ```
+
 ## Git version control
+
 By this stage you should already be thinking about version control.
 
 Note that:
+
 * You SHOULD commit `package.json` and `package-lock.json`
 to your repo
 
@@ -535,12 +542,17 @@ Instead, add `node_modules` to `.gitignore`  so it's not
 commited to your repo. Every deployment should retrieve
 its own dependencies.
 
-When you clone a project's repository, you can restore its
-`node_modules` directory by simply running `npm install`
-or `npm i`
+example `.gitignore` file
+```
+node_modules
+```
 
 ---
+## Installing someone else's project
 
+When you clone a project's repository, it won't have its own node_modules directory and the project won't run. To complete the installation run `npm install` or `npm i`. Then it will be ready to use.
+
+---
 # The node command
 
 To execute a file containing JavaScript we simply type:
@@ -558,60 +570,82 @@ node can parse and run JavaScript code directly from the command line with
 ```
 node -p "console.log(1 + 2)"
 ```
+## Node REPL
+
+Typing `node` by itself will run the Node REPL
+
+You can type any valid JavaScript command or expression.
+
+```js
+> 1 + 2
+3
+
+> console.log('Test');
+Test
+```
+
+You can leave the REPL by typing `Ctrl-C` twice.
+
+---
 
 ## dev dependencies
-You can install tools to facilitate development but don't need to be deployed with your completed code as "dev dependency".
 
-Just like normal dependencies you install them with npm but you at the `-D` command line switch.
+You can install development tools into your project but because you usually don't want these to get bundled up and deployed to production you should install these as "dev dependency".
+
+Just like normal dependencies you install them with npm but adding the `-D` command line switch.
+
+For example, let's add eslint which is the most popular JavaScript linter. We'll discuss linting in more detail later.
+
 ```
 npm install eslint -D
 ```
-This updates the `devDependencies` section in your `package.json`. eg.
+
+Running this command installs the eslint tool in your node_modules directory and updates the `devDependencies` section in your `package.json`.
+
+For example:
+
 ```
 "devDependencies": {
   "eslint": "^5.16.0",
 }
 ```
-## running
 
-Unless you add something to your path, tools that have been installed in your node_modules are a little inconvenient to run.
+## Running code
+
+Let's run eslint. There are several ways of going about this but unless you add something to your path, tools that have been installed in your node_modules are a little inconvenient to run.
 
 For example to run eslint on the files in the root directory of your project you might type
+
 ```
 ./node_modules/.bin/eslint .
 ```
+
 You will usually find a shortcut to your tool in the `.bin` directory but this is still too wordy for most uses.
 
-## npx
+NOTE: because we haven't set eslint up yet you'll see this error message
+```
+Oops! Something went wrong! :(
 
-Far better than typing the path to the `.bin` directory is to run them with npx.
-```
-npx eslint .
+ESLint: 6.3.0.
+
+ESLint couldn't find a configuration file. To set up a configuration file for this project, please run:
+
+    eslint --init
+
+ESLint looked for configuration files in /workspace/start-workshop and its ancestors. If it found none, it then looked in your home directory.
+
+If you think you already have a configuration file or if you need more help, please stop by the ESLint chat room: https://gitter.im/eslint/eslint
+
 ```
 
-## scripts
-Another way is to add a script entry to your `package.json` to make it available from npm. Any entry you place in the `scripts` section of `package.json` can be executed by npm run. For example if we add an entry called `lint`
-```
-"scripts": {
-  "lint": "eslint ."
-}
-```
-we could run it as:
-```
-npm run lint
-```
-npm is able to find eslint by searching `node_modules` and you can save some typing.
+Let's set up eslint with the --init command line switch
 
-Each entry in `package.json` is a command in the shell of the operating system you are running on. This can lead to some platform incompatibilities particularly for Windows users. It is recommended that Windows users install some kind of Linux or Unix based shell to make this a little easier.
-
-You can pass additional arguments to an npm script by using the -- arg.
-
-## eslint
-So let's now set up our linting script so that we can start using it in development. First we need to initialise `eslint`. To do that we need to pass the --init arg.
 ```
-npm run lint -- --init
+./node_modules/.bin/eslint --init
 ```
+
 Answer the questions to set up your configuration. Here are some typical responses.
+
 ```
 ? How would you like to use ESLint?
     To check syntax, find problems, and enforce code style
@@ -671,7 +705,9 @@ module.exports = {
   },
 };
 ```
-by specifying a preference for using an industry style guide  you get various linting rules for free. Over time you may choose to add new ones or turn some of them off. That's what the `rules` entry in `.eslint.js` is for. For example:
+Take note of this .js file's format. This is a Node CommonJS format and you'll be seeing this style again later.
+
+By specifying a preference for using an industry style guide  you get various linting rules for free. Over time you may choose to add new ones or turn some of them off. That's what the `rules` entry in `.eslint.js` is for. For example:
 ```
 rules: {
   "no-confusing-arrow": 0,
@@ -686,38 +722,91 @@ rules: {
 }
 ```
 
+Now that eslint has been configured you can run now eslint over your codebase
+
+```
+./node_modules/.bin/eslint .
+```
+
+## npx
+You can make it easier to run by using the `npx` command.
+
+`npx` is a command runner which automatically adds `./node_modules/.bin` to the start of your command.
+
+Far better than typing the path to the `.bin` directory is to run them with npx.
+```
+npx eslint .
+```
+
+## npm scripts
+
+For tasks you tun all the time, it would be a good idea to add it to the `scripts` section of your `package.json`. This makes it available to run from npm.
+
+Any entry you place in the `scripts` section of `package.json` can be executed by
+```
+npm run <script_name>
+```
+
+For example if we added an entry called `linter` for running the linter on our project:
+
+```
+"scripts": {
+  "linter": "eslint ."
+}
+```
+we can now run the `linter` script as:
+
+```
+npm run linter
+```
+
+Each script entry you add to `package.json` is in the format of a command in the shell of the operating system you are currently running on.
+
+This can lead to some platform incompatibilities particularly for Windows users. It is highly recommended, therefore, that Windows users install some kind of Linux or Unix based shell to make working with `npm` a little easier.
+
+A good example is Git BASH which is a part of the Git for Windows software suite.
+
+```
+https://gitforwindows.org/
+```
+
+You can pass additional arguments to an npm script by using the -- arg.
+
+
 ---
 
 # Modules
+
 Node files are referred to as modules.
 
 ## CommonJS
-Node has been around for over a decade and uses the CommonJS module format. This is an older module format which predates the module format standardised in JavaScript in 2016.
+
+Node has been around for over a decade and uses the CommonJS module format. This is an older module format which predates the module format that was standardised in JavaScript in 2016.
 
 CommonJS does not use the import and export keywords but take a slightly different approach to importing and exporting
 dependencies.
 
-The node ecosystem is still adjusting
-to the newer ES2016 module format but in
-the meantime, we recommend continuing to work with
-the CommonJS format for node projects.
+The Node ecosystem is still adjusting to the newer ES2016 module format but in the meantime, we continue to recommend working with the CommonJS format for node projects.
 
 ## Module variables
-Script files in node are encapsulated as CommonJS
+
+Script files in Node are encapsulated as CommonJS
 modules. This means that variables that are declared
-in a file are scoped to that file and won't leak into the
-global scope.
+within a file are **scoped** to that file and won't leak into the global scope.
 
 For the code in one file to be able to read a value from
-another file they must explicitly import a value that has been
-explicitly exported the other file.
+another file they must explicitly **import** a value that has been explicitly **exported** the other file.
 
-The way scope is contained is that the content of a node
-file is automatically wrapped inside a function
-of the form:
+To understand the way that scope works with Node modules, you need to know that when the content of a module file is loaded it autmatically gets wrapped by node by a function closure.
+
+For example, imagine I have a file called `hello.js` which contains
+```js
+console.log('Hello!');
 ```
+When Node loads the file and wraps it like this
+```js
 function (exports, require, module, __filename, __dirname) {
-  // ...your code here
+  console.log('Hello!');
 }
 ```
 This means you have a scope (which in addition to the
@@ -970,7 +1059,7 @@ createUser('John Hardy','xyz123','avatar.jpg', (err) => {
 );
 ```
 
-## promises
+## Promises
 
 A promise is an object that contains a value, either now
 or sometime in the future. Asynchronous operations take place in
@@ -989,7 +1078,7 @@ new Promise((resolve, reject) => {
 
 ***** TODO: give examples of promises
 
-## promisify
+## Promisify
 
 `promisify` is a utility function that comes standard with node. It is a `high order function`
 ```
@@ -1017,7 +1106,7 @@ readFilePromise('file.txt')
   .then(value => console.log(value))
 ```
 
-## How promisify works
+### How promisify works
 
 the way `util.promisify` is implemented can be seen here:
 ```
@@ -1077,7 +1166,7 @@ const createUser = (username, password, picture) =>
   );
 ```
 
-## async/await
+## Async/await
 
 This scope access issue is less of a problem with async/await syntax which we'll touch on briefly here. Async/await gives you the ability to do all of this asynchronous work in the same level of scope. Superficially it even looks like old-style imperative programming but despite this there are some gotchas with async/await and it's still necessary to understand promises in order to use it properly.
 
