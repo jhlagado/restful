@@ -1072,18 +1072,41 @@ os.networkInterfaces()
 ---
 # Debugging with vscode
 
-vscode debugger `launch.json`
+The VS Code editor has a built in Node debugger which is easy to set up. Go to the debugging tab and select Add Configuration. Select Node.js and launch.
 
-An array of debugging configurations.
+This creates a file in the .vscode directory of your project called `launch.json`
+
+This file contains the configuration information to debug your application. For example:
+
 ```
-type       "node"
-request    "launch" | "attach"
-name       title of config
-program:   location of file to run
-env:       object with vars to add to debug environment
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch Program",
+            "program": "${workspaceFolder}/app.js"
+        }
+    ]
+}
 ```
+---
+# Standard API
+
+Node has a large standard library of modules that you can use in your programs. We will be only touching on a few of them here but you can read the documentation to them here:
+
+https://nodejs.org/api/
+
+A thing you will notice is that many of the I/O based functions come in "Sync" and "Async" forms. Sync operations are easier to understand and think about than Async ones but in a single-threaded architecture such as Node you should nearly always use Async operations. Sync means blocking and waiting for an operation to finish. While this is OK if you're writing a script to do a simple job but for a server running on a single-threaded architecture, running Sync operations would be a disaster.
+
+The uniqueness of Node's single-threaded architecture means that we need to do things differently if we want to be able to scale.
 
 ---
+
 # Asynchronous operations
 
 Asynchronous or async operations are actions that happen at some time in the future. Because node is a single-threaded architecture in which everything that happens on the main thread is synchrononous, node must relinquish control of the main thread regularly in order for asynchronous operations to get a chance of happening.

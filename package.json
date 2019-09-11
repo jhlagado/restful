@@ -1,7 +1,7 @@
 {
   "name": "restful",
   "version": "1.0.0",
-  "description": "backend restful service",
+  "description": "node workshop",
   "main": "app.js",
   "scripts": {
     "start": "nodemon bin/www",
