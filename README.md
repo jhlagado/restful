@@ -10,7 +10,7 @@ September 16, 2019
 | ----------------------- |-------------
 | Modern JavaScript       | Serving HTTP
 | Node Architecture       | Express
-| NPM                     | Middleware
+| Npm                     | Middleware
 | The Node command        | Logging
 | Modules                 | Routes
 | Debugging               | Mongo
@@ -458,7 +458,7 @@ While proxies are not very commonly used they can become very useful when interc
 
 ```
 ---
-# NPM
+# Npm
 
 Npm is the package manager for the Node ecosystem. It connects your app to
 the Npm registry, by far the world's largest registry of software packages.
@@ -627,13 +627,28 @@ Test
 
 You can leave the REPL by typing `Ctrl-C` twice.
 
+The REPL also has some commands which you can access with `.help`
+
+```
+> .help
+.break    Sometimes you get stuck, this gets you out
+.clear    Alias for .break
+.editor   Enter editor mode
+.exit     Exit the repl
+.help     Print this help message
+.load     Load JS from a file into the REPL session
+.save     Save all evaluated commands in this REPL session to a file
+```
+
+You can also access a list of all the global variables by typing TAB twice.
+
 ---
 
 ## Developer dependencies
 
 You can install development tools into your project but because you usually don't want these to get bundled up and deployed to production you should install these as "dev dependency".
 
-Just like normal dependencies you install them with npm but adding the `-D` command line switch.
+Just like normal dependencies you install them with `npm` but adding the `-D` command line switch.
 
 For example, let's add eslint which is the most popular JavaScript linter. We'll discuss linting in more detail later.
 
@@ -715,7 +730,7 @@ The config that you've selected requires the following dependencies:
 eslint-config-airbnb-base@latest eslint@^4.19.1 || ^5.3.0
 eslint-plugin-import@^2.14.0
 
-? Would you like to install them now with npm?
+? Would you like to install them now with `npm`?
     Yes
 ```
 This process will install additional dev dependencies in `package.json`
@@ -774,14 +789,14 @@ You can make it easier to run by using the `npx` command.
 
 `npx` is a command runner which automatically adds `./node_modules/.bin` to the start of your command.
 
-Far better than typing the path to the `.bin` directory is to run them with npx.
+Far better than typing the path to the `.bin` directory is to run them with `npx`.
 ```
 npx eslint .
 ```
 
 ## npm scripts
 
-For tasks you tun all the time, it would be a good idea to add it to the `scripts` section of your `package.json`. This makes it available to run from npm.
+For tasks you tun all the time, it would be a good idea to add it to the `scripts` section of your `package.json`. This makes it available to run from `npm`.
 
 Any entry you place in the `scripts` section of `package.json` can be executed by
 ```
@@ -790,7 +805,7 @@ npm run <script_name>
 
 For example if we added an entry called `linter` for running the linter on our project:
 
-```
+```js
 "scripts": {
   "linter": "eslint ."
 }
@@ -811,7 +826,7 @@ A good example is Git BASH which is a part of the Git for Windows software suite
 https://gitforwindows.org/
 ```
 
-You can pass additional arguments to an npm script by using the -- arg.
+You can pass additional arguments to an `npm` script by using the -- arg.
 
 
 ---
@@ -847,12 +862,15 @@ console.log('Hello!');
 When Node loads the file and wraps it like this
 ```js
 function (exports, require, module, __filename, __dirname) {
+  /// YOUR CODE HERE ///
+
   console.log('Hello!');
+
+  /// YOUR CODE HERE ///
 }
 ```
-This means you have a scope (which in addition to the
-global scope object) has five values injected which are related
-to the current file and are not part of the global scope.
+This means you have a scope (which in addition to the global scope object) has five values injected which are related to the current file and are **not** a part of the global scope.
+
 ```
 exports       shortcut to the `exports` property of the module object
 require       a function for importing from other modules
@@ -860,54 +878,81 @@ module        the module object
 __filename    a full path to the file
 __dirname     a full path to the file's parent directory
 ```
-The `module` object has a number of useful properties in
-addition to the `exports` property. Here are the main ones.
+
+The `module` object has a number of useful properties in addition to the `exports` property. Here are the main ones.
+
 ```
 id            an id for module, typically a full path to the file
 exports       an object to be exported by module
 filename      a full path to the file
 paths         an array of paths to search when importing a module
 ```
-### Imports
-Files have scopes which are isolated from one other. Apart from attaching variables to the global scope (not recommended) the way to import values into a file is with the CommonJS `require()` function. This function is injected as an argument by the function wrapper mentioned earlier.
+
+### require()
+Files have scopes which are isolated from one other. Apart from attaching variables to the global scope (not recommended), the way to import values into a file is with the CommonJS `require()` function. `require()` is a function that was added to the module's scope by the function wrapper mentioned earlier.
 
 `require()` takes a file path which is either relative or absolute.
 
-#### Relative
-```
+NOTE: Native JavaScript module support is coming to Node but for now we recommend using CommonJS and `require()` function rather than the JavaScript `import` and `export` keywords.
+
+#### require() relative paths
+
+Example
+
+```js
 const app = require('./app');
 ```
-#### Absolute
-```
+
+Relative file paths search relative to the current file. The .js file extension is optional.
+
+NOTE: If the path refer to a directory then Node will look for a file called `index.js` and load that. If the directory contains a `package.json` which has a file specified in its `main` entry, Node will load that file.
+
+#### require() absolute paths
+
+Example
+
+```js
 const lodash = require('lodash');
 ```
-Note that the extension is not needed. Relative paths are relative to the current file which absolute paths search for
-a module by name in `node_modules` directory if present and searches each parent directory if it has a `node_modules` directory until it reaches the user's home directory.
 
-You can see the paths it searches by looking at the `module.paths` object. Here is a example on my Macbook.
+Once again the .js extension is optional.
+
+Absolute paths search for a module by name in `node_modules` directory. Any directory that has a package.json can also have a `node_modules` directory. Node will search the `node_modules` directory of each parent directory until it reaches the user's home directory.
+
+You can see the paths that Node searches by looking at the `module.paths` object that is injected into every module.
+
+You can examine how it works by using the Node REPL.
 ```
-'/Users/jhardy/projects/node/restful/node_modules',
-'/Users/jhardy/projects/node/node_modules',
-'/Users/jhardy/projects/node_modules',
-'/Users/jhardy/node_modules',
-'/Users/node_modules',
-'/node_modules',
-'/Users/jhardy/.node_modules',
-'/Users/jhardy/.node_libraries',
-'/usr/local/lib/node'
+node
 ```
-An import can be anything exported from another file. It could be a value such as a number, string, array or a function. Quite often though it is an object that contains a collection of values.
+type:
+```
+> module.paths
+[ '/workspace/start-workshop/repl/node_modules',
+  '/workspace/start-workshop/node_modules',
+  '/workspace/node_modules',
+  '/node_modules',
+  '/home/gitpod/.node_modules',
+  '/home/gitpod/.node_libraries',
+  '/home/gitpod/.nvm/versions/node/v10.15.3/lib/node' ]
+```
+
+An import can be anything exported from a module. It could be a value such as a number, string, array or a function. Quite often though it is an object that contains a collection of values.
 
 ### Exports
-Just as imports use an injected function `require()`, exporting is done with the injected `module.exports` and `exports` objects. The `exports` object is really just a shortcut ot alias to `module.exports` so either can be used.
+Just as imports use an injected function `require()`, exporting is done using the module `exports` object.
+
+The `exports` object is actually just a shortcut to `module.exports` so either can be used.
 
 `exports` is good for exporting individual values. eg.
-```
+
+```js
 exports.x = 1;
 exports.y = 2;
 exports.z = 3;
 ```
-while `module.exports` enables you to replace the entire exports object. While it's a little bit wordier, I find `module.exports` to be more flexible in most cases.
+
+while `module.exports` enables you to replace the entire exports object.
 ```
 module.exports = {
   x: 1,
@@ -915,34 +960,46 @@ module.exports = {
   z: 3,
 };
 ```
+
 ### Destructuring imports
-We can importing the previous example as a single object and then use the properties on the object. eg.
-```
+
+We can import the previous example as a single object and then use the properties on the object. eg.
+
+```js
 const object = require('./module');
+
 console.log(object.x + object.y);
 ```
-but it's usually better to destructure the parts of the object that we are interested in
-```
+
+but it's usually much clearer to destructure the parts of the object that we are interested in
+
+```js
 const { x, y } = require('./module');
+
 console.log(x + y);
 ```
+
 This leads to cleaner code.
 
 ### Import Cache
+
 When you `require()` a module for the first time the top level code in that file runs once and assignment are made to the `module.exports` object which is passed back. This result is cached by the system so that when `require()` is called again on the same module it will return the cached version.
 
-These cached objects are mutable so use with care. It is possible to modify the imported objects and this can affect later uses of the cached import.
+These cached objects are *mutable* so use them with care.
+
+It is possible to modify the imported objects and this can affect later uses of the cached import.
 
 Consider this example where a file `module.js` contains:
-```
+
+```js
 module.exports = {
   x: 123,
 };
 ```
+
 We can import the exported object, assign it to a variable and modify it. Then when we import it again we get the modified version.
 
-This is a way to comunicate state between modules but as with global state, this is not recommended.
-```
+```js
 const value1 = require('./module');
 
 value1.y = 456;
@@ -951,6 +1008,9 @@ const value2 = require('./module');
 
 console.log({ value2 });
 ```
+
+This is *one way* to comunicate state between modules but as with global state, this is not recommended because without great care being exercised this can be a subtle source of bugs.
+
 ## Global Scope
 Global scope is available everywhere in your programs through a single varibale called `global`.
 
@@ -958,7 +1018,7 @@ You can see `global` by
 ```
 console.log(global);
 ```
-But you can also start the node command-line REPL
+But you can also start the Node REPL
 and press `TAB` twice.
 
 Global variables can also be accessed directly without using
