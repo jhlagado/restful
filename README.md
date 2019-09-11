@@ -51,11 +51,11 @@ This is not an exhaustive list of the new features of JavaScript but includes mo
 ## let & const
 These new keywords allow decalring variables that are scoped to a block of code instead of a function. Declarations are usually declared as `const` but when a name need to be reused you can declare them as `let`.
 
-```
+```js
 const x = 1;
 x = 2; // error
 ```
-```
+```js
 let x = 1;
 x = 2; // OK
 ```
@@ -65,7 +65,7 @@ NOTE: just because a variable has been declared as `const` this only refers to t
 ---
 ## Enhanced object literals
 ### Object key expressions
-```
+```js
 const x = 'aaa';
 
 const obj = {
@@ -77,7 +77,7 @@ const obj = {
 ### Method function shorthand
 
 Old way
-```
+```js
 {
   sayHello: function() {
     console.log('hello!');
@@ -85,7 +85,7 @@ Old way
 }
 ```
 New way
-```
+```js
 {
   sayHello() {
     console.log('hello!');
@@ -98,45 +98,56 @@ New way
 ## Arrow functions
 JavaScript now has a more convenient syntax for declaring anonymous lambda functions. Unlike the traditional `function` syntax, arrow functions have no implied variables called `this` or `arguments`.
 
-```
+```js
 // traditional function
 function add(a, b) {
   return a + b;
 }
 ```
-```
+
+```js
 const fun = (a, b) => a + b;
 ```
+
 If the function body can be expressed as a single expression then there is no need for a return statement.
 
 If several lines of code are needed to express the body of the function then braces are used to indicate a code block and a return statement is required;
-```
+
+```js
 const fun = (a, b) => {
   const result = a + b;
   return result;
 };
 ```
+
 If an arrow function needs to return an object then it needs to be wrapped in parentheses so it won't be mistake for a code block;
-```
+
+```js
 const fun = () => ({a: 1});
 ```
+
 If an arrow function only has one argument then you can drop the parentheses from the argument declaration.
-```
+
+```js
 const fun = (a) => a + 1;
 ```
-```
+
+```js
 const fun = a => a + 1;
 ```
+
 ## Spreading
 It is now much easier to copy and compose arrays and objects
-```
+
+```js
 const a = [1,2,3];
 
 const b = [...a, 4]; // [1,2,3,4]
 
 const c = [...a, 4, ...a]; // [1,2,3,4,1,2,3]
 ```
-```
+
+```js
 const x = {a: 1, b: 2};
 
 const y1 = {...x, c: 3}; // {a: 1, b: 2, c: 3}
@@ -145,6 +156,7 @@ const y2 = {...x, a: 4}; // {a: 4, b: 2}
 
 const y3 = {...x, ...{a: 4, c: 3}}; // {a: 4, b: 2, c: 3}
 ```
+
 When used in this way, ... is referred to as the "spread" operator.
 
 ---
@@ -152,7 +164,7 @@ When used in this way, ... is referred to as the "spread" operator.
 
 Many of the operations that you can do on the right-hand side of the `=` you can also do on the left-hand side.
 
-```
+```js
 const x = 1;
 
 const x = [1,2,3];
@@ -164,44 +176,51 @@ const [x] = [1,2,3,4]; // x = 1
 
 const [,,x] = [1,2,3,4]; // x = 3
 ```
-```
+
+```js
 const x = 1;
 const y = 1;
 [y, x] = [x, y]; //swap x with y
 ```
-```
+
+```js
 const fun = (a, ...b) => {
   // do something
 }
 
 fun(1,2,3,4); // arg a = 1, arg b = [2,3,4]
 ```
-```
 
+```js
 const {a} = {a: 1}; // a = 1
 
 const {a: b} = {a: 1}; // b = 2 🤯
 
 const {a, ...b} = {a: 1, b: 2, c: 3}; // a = 1, b = {b: 2, c:3}
 ```
+
 The last example is a good way to exclude a key from an object.
 On the left hand side and for function arguments, ... is referred to as the "rest" operator. It can only be used in the last position.
-```
+
+```js
 const [x, y, ...z] = [1,2,3,4]; //this works
 
 const [...x, y, z] = [1,2,3,4]; //this doesn't
 ```
+
 ---
 ## Default arguments
 
 Function arguments can now be optional and can take a default value. If you don't pass an argument, or you pass `undefined` as an argument, it will use the default value.
-```
+
+```js
 const f = (a=2, b=3) => a + b
 
 f(1); // 4
 
 f(undefined, 10); // 12
 ```
+
 ---
 
 ## Template strings
@@ -209,18 +228,23 @@ f(undefined, 10); // 12
 JavaScript now offers multi-line strings which merge values from the scope without needing concatnation operations.
 
 Old style
-```
+
+```js
 const name = 'John';
 const x = 'Hello,\n' + name + '.\n G'day!';
 ```
+
 New style
-```
+
+```js
 const name = 'John';
 const x = `Hello,
 ${name}.
 G'day!`;
 ```
+
 Both output
+
 ```
 Hello,
 John.
@@ -231,7 +255,8 @@ G'day!
 ## Classes
 
 Old style
-```
+
+```js
 const NewClass = function (x) {
   this.x = x;
 }
@@ -244,8 +269,11 @@ NewClass.prototype.getX = function() {
   return this.x;
 }
 ```
+
 New style
-```
+
+```js
+
 class NewClass extends OldClass {
 
   constructor(x) {
@@ -258,23 +286,28 @@ class NewClass extends OldClass {
   }
 }
 ```
+
 Usage:
-```
+
+```js
 const obj = new NewClass(100);
 
 console.log(obj.getX());
 ```
+
 ---
 ## Import and export
 Modern JavScript has modules and the ability to import and export from these modules.
-```
+```js
 // filename: md.js
 export const x = 123
 ```
-```
+
+```js
 import {x} from 'md.js'
 ```
-NOTE: Node has its own way of handling modules (know as the CommonJS format) and has not fully integrated the modern JavaScript way. As we will see Node uses a different syntax for importing and exporting values.
+
+NOTE: Node has its own way of handling modules (known as the CommonJS format) and has not fully integrated the modern JavaScript way. As we will see Node uses a different syntax for importing and exporting values.
 
 Soon Node will fully support modern JavScript modules by right now that functionality is hidden behind a feature switch.
 
@@ -283,12 +316,13 @@ Soon Node will fully support modern JavScript modules by right now that function
 ## Dynamic imports
 
 Modern JavaScript can dynamically import values at runtime. This enables lazy-loading modules as needed. When you load a module, JavaScript handles this with a "promise". More about this shortly.
-```
+
+```js
 import('module.js').then(mod => {
   console.log(`this is the value of x: ${mod.x});
 })
-
 ```
+
 As mentioned above, Node handles modules differently and we will use the Node way of loading and importing modules in this workshop.
 
 ---
@@ -298,7 +332,8 @@ Modern JavaScript defines the concept of an Iterable which is an functional inte
 Examples of Iterables are Arrays and Strings but you can create your own as well. Objects which are Iterable mean that they can be interated over. It means that you can use the spread and rest operator ... on them and you can also use the `for..of` contruct for looping.
 
 For example, the traditional way to loop over an array
-```
+
+```js
   const array = [1,2,3,4,5];
 
   for (let i = 0; i < array.length; i++) {
@@ -306,24 +341,29 @@ For example, the traditional way to loop over an array
   }
 ```
 Here is the modern way to loop over an array. This works because arrays implement the Iterable interface.
-```
+
+```js
   const array = [1,2,3,4,5];
 
   for (let item of array) {
     console.log(array[i]);
   }
 ```
+
 `for..of` loops are good for preventing common "off-by-one" bugs.
 
 ---
 ## Promises
 
 Promises are a way for dealing with asynchonicity in JavaScript in a single-threaded environment. This is a complex subject and one we will discuss in detail a bit later because it is very important in Node.
-```
+
+```js
+
 readFilePromise('file.txt')
 .catch(err => console.log(`an error occured ${err}`))
 .then(content => console.log(`Content: ${content}`));
 ```
+
 ---
 ## Generators
 
@@ -332,7 +372,8 @@ Generators are a powerful mechanism for simplifying the process of writing itera
 ---
 ## Async/await
 Async/await is an advanced feature for writing asynchronous code which is implemented using promises and generators. We will be discussing async/await in much more detail because this is also important in Node.
-```
+
+```js
 async function f() {
   try {
     const content = readFilePromise('file.txt');
@@ -348,7 +389,7 @@ f();
 ---
 ## Maps & Sets
 Modern JavaScript has more efficient data structures for common algorithms. Whereas as normal JavaScript objects are often used as dictionary types for quick look up, this is not as efficient as using a Map or a Set for the same task. Better still, while JavaScript objects can only have strings as keys, Maps can use any object as a key.
-```
+```js
 // Map
 const m = new Map();
 m.set("hello", 42);
@@ -372,7 +413,8 @@ WeakMaps and WeakSets provide memory leak-free versions of Map and Set. The prob
 Proxies are a powerful way to intercept and augment the behaviour of objects.
 
 Intercepting a get on a object
-```
+
+```js
 const target = {};
 
 const p = new Proxy(target, {
@@ -386,7 +428,7 @@ p.world;  // 'Hello, world!';
 ```
 Intercepting a function call
 
-```
+```js
 const target = () => 'I am the target';
 
 const p = new Proxy(target, handler = {
@@ -440,7 +482,7 @@ author          author's name
 license         licence, MIT, ISC, GPL tec
 ```
 which will generate a package.json file like this:
-```
+```json
 {
   "name": "demo-package",
   "version": "1.0.0",
@@ -533,16 +575,14 @@ By this stage you should already be thinking about version control.
 
 Note that:
 
-* You SHOULD commit `package.json` and `package-lock.json`
-to your repo
+* You **SHOULD** commit `package.json` and `package-lock.json` to your repo
 
-* You SHOULD NOT commit node_modules.
+* You **SHOULD NOT** commit node_modules.
 
-Instead, add `node_modules` to `.gitignore`  so it's not
-commited to your repo. Every deployment should retrieve
-its own dependencies.
+Instead, add `node_modules` to `.gitignore` so it doesn't get commited to your repo. Every intstallation or deployment should retrieve its own dependencies.
 
 example `.gitignore` file
+
 ```
 node_modules
 ```
@@ -559,6 +599,7 @@ To execute a file containing JavaScript we simply type:
 ```
 node <filepath>
 ```
+
 Note:
 * the .js extension is optional
 * if filepath is a directory then it will load index.js (if present).
@@ -588,7 +629,7 @@ You can leave the REPL by typing `Ctrl-C` twice.
 
 ---
 
-## dev dependencies
+## Developer dependencies
 
 You can install development tools into your project but because you usually don't want these to get bundled up and deployed to production you should install these as "dev dependency".
 
@@ -678,7 +719,7 @@ eslint-plugin-import@^2.14.0
     Yes
 ```
 This process will install additional dev dependencies in `package.json`
-```
+```js
   "devDependencies": {
     "eslint": "^5.16.0",
     "eslint-config-airbnb-base": "^13.1.0",
@@ -686,7 +727,7 @@ This process will install additional dev dependencies in `package.json`
   }
 ```
 and create an `.eslint.js` file
-```
+```js
 module.exports = {
   env: {
     commonjs: true,
@@ -708,7 +749,7 @@ module.exports = {
 Take note of this .js file's format. This is a Node CommonJS format and you'll be seeing this style again later.
 
 By specifying a preference for using an industry style guide  you get various linting rules for free. Over time you may choose to add new ones or turn some of them off. That's what the `rules` entry in `.eslint.js` is for. For example:
-```
+```js
 rules: {
   "no-confusing-arrow": 0,
   "implicit-arrow-linebreak": 0,
